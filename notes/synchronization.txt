@@ -1,0 +1,5 @@
+send methods will be non-blocking and messages will be sent asynchronously
+
+handle methods will be called asynchronously and should not be called except internally by the class itself
+handle methods might need to be called on its own thread so that it doesn't block interfere with engine operations
+

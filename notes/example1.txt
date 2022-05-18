@@ -1,0 +1,118 @@
+// Async mux			means method is called asynchronously and multiplexed by handle method
+
+
+White Player (client)				(server)									Black Player (client)
+									uci::Client sf(sfIn, sfOut);
+									uci::Client lc(lc0In, lc0Out);
+									run(sf, "stockfish.exe");
+									run(lc, "lc0.exe");
+
+									sf.sendUci();
+									lc.sendUci();
+uci::Server server(cin, cout);													uci::Server server(cin, cout);
+
+server.waitForUci();															server.waitForUci();
+server.sendId("Stockfish 13", "");												server.sendId("LC0", "Not Me");
+
+uci::Option op;																	uci::Option op;
+op.emplace_back("name", "Hash");												...
+op.emplace_back("type", "spin");												...
+op.emplace_back("default", "1");												...
+op.emplace_back("min", "1");													...
+op.emplace_back("max", "128");													...
+server.sendOption(op);															server.sendOption(op);
+									
+													
+									sf.handleOption();	// Async multiplex												
+									lc.handleOption();	// Async multiplex
+									
+op.clear();
+op.emplace_back("name", "NalimovPath");
+op.emplace_back("type", "string");
+op.emplace_back("default", "");
+server.sendOption(op);
+
+									sf.handleOption();	// Async multiplex
+									lc.handleOption();	// Async multiplex
+
+op.clear();
+op.emplace_back("name", "NalimovCache");
+op.emplace_back("type", "spin");
+op.emplace_back("default", "1");
+op.emplace_back("min", "1");
+op.emplace_back("max", "32");
+server.sendOption(op);				
+								
+									sf.handleOption();	// Async multiplex
+									lc.handleOption();	// Async multiplex
+
+server.sendUciok();																server.sendUciok();		
+
+									sf.handleUciok();	// Async multiplex
+									lc.handleUciok();	// Async multiplex
+
+									uci::Option op;
+									op.emplace_back("name", "Hash");
+									op.emplace_back("value", "32");
+									sf.sendOption(op);
+									lc.sendOption(op);
+
+server.handleOption();	// Async mux											server.handleOption();	// Async mux	
+
+									sf.sendIsReady();
+									lc.sendIsReady();
+
+									sf.waitForReadyOk();
+									lc.waitForReadyOk();
+				
+server.handleReadyOk();	// Async mux											server.handleReadyOk();	// Async mux
+// If engine is ready, why won't it be,
+// reply with "readyok" and continue with 
+// normal operations
+
+									sf.sendUciNewGame();
+									lc.sendUciNewGame();
+
+server.handleUciNewGame(); // Async mux
+// Clear search data I guess?
+// And just return
+
+// ------------------------------------ GAME TIME -----------------------------
+
+									sf.sendPosition("startpos");
+									sf.sendGo("infinite");
+									
+server.handlePosition();	// Async mux
+// Set current position
+// but don't start searching yet
+
+server.handleGo();		// Async mux
+// Start searching current position
+// Also, set a deadline timer that will
+// that will periodically check on search
+// progress and send info messages back to
+// server.
+server.sendInfo(...);	// Called asynchronously 
+server.sendInfo(...);	// from deadline timer
+server.sendInfo(...);	// established by
+server.sendInfo(...);	// server.handleGo()
+
+// Search stops or server sends stop command
+
+									sf.sendStop();
+
+server.handleStop();	// Async mux
+// Tell search algorithm to stop searching
+// And return best move
+// handleStop() will get best move
+// And send it using bestmove message
+server.sendBestMove(forge::Move{...});
+
+									sf.handleBestMove();	// Async mux
+									
+									Position pos;
+									pos.move(move);
+
+									lc.sendPosition(pos.toFen());
+
+									

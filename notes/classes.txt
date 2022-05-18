@@ -1,0 +1,180 @@
+namespace Id
+{
+	class Name {
+		public:
+		- name - string
+	};
+
+	class Author {
+		public:
+		- author - string
+	};
+}
+
+enum CopyProtection : bool
+{
+	ok,
+	error,
+}
+
+enum Registration 
+{
+	ok,
+	error,
+	checking,
+	later,
+}
+
+class Score
+{
+public:
+	cp - int						// the score from the engine's point of view in centipawns
+	mate - int						// mate in y moves, not plies
+	lowerbound - int				// the score is just a lower bound
+	upperbound - int				// the score is just an upper bound
+};
+
+class CurrLine
+{
+public:
+	cpuNr - int						// CPU number 
+	vector<forge::Move>				// sequence of moves in current line
+};
+
+class Info
+{
+public:
+	- depth - int					// search depth in plies
+	- seldepth - int				// selective search depth in plies
+	- time - int					// the time searched in ms
+	- nodes - int					// x nodes searched
+	- pv - vector<forge::Move>		// the best line found
+	- multipv - int					// this for the multi pv mode
+	- score - Score					// See class Score
+	- currmove - forge::Move		// currently searching this move
+	- currmovenumber - int			// currently searching move number x, for the first move x should be 1 not 0
+	- hashfull - ???				// the hash is x permill full
+	- nps - int (or float?)			// # of nodes per second searched
+	- tbhits - int					// # of positions where found in the endgame table bases
+	- sbhits - int					// # of positions where found in the shredder endgame databases
+	- cpuload - int					// the cpu usage of the engine is x permill
+	- str - string					// any string str which will be displayed be the engine,
+	- refutation - vector<forge::Move>	// moves refuted by the line <move2> ... <movei>, i can be any number >= 1.
+	- currline - CurrLine			// 
+}
+
+class KeyValuePair
+{ 
+public:
+	string key;
+	string value;
+};
+
+// TODO: Work on this class
+class Option : public vector<KeyValuePair>
+{
+public:
+	// -------------------------------- NESTED CLASSES ------------------------
+	class Name 
+	{
+	public:
+		- id - string				// The option has the name id
+	};
+
+	class Type
+	{
+	public:
+		// ---------------------------- NESTED CLASSES ------------------------
+		class Check : public Type { public: bool check; };
+		class Spin : public Type { public: int spin };
+		class Combo : public Type { public: string combo; };
+		class Button : public Type { public: button; };
+		class String : public Type { public: str; };
+
+	public:
+		Type * typePtr;		// TODO: ??? 
+	};
+
+	class Default
+	{
+	public:
+		- _default - string			// the default value of this parameter is x
+	}
+
+	class Min
+	{
+	public:
+		- min - T?					// the minimum value of this parameter is x
+	};
+
+	class Max
+	{
+	public:
+		- max - T?					// the maximum value of this parameter is x
+	};
+
+	class Var
+	{
+	public:
+		- var - T?					// a predefined value of this parameter is x
+	};
+};
+
+// ----------------------------------------------------------------------------
+
+UciBase
+	- in - istream		// In comming stream
+	- out - ostream		// Out going stream
+
+UciServer : UciBase
+	+ sendId(string name, string author)
+	+ sendIdName(string name);
+	+ sendIdAuthor(string author);
+	+ sendUciok()
+	+ sendReadyOk()
+	+ sendBestMove(forge::Move bestMove, vector<forge::Move> ponderingMoves)
+	+ sendCopyProtection(CopyProtection copyProtection)
+	+ sendRegister(Registration registration)
+	+ sendInfo(Info info)
+	+ sendOption(Option op)	// ??? 
+
+	+ handle(string & message);
+	+ handleUci()
+	+ handleDebug(bool isOn) 
+	+ handleIsReady()
+	+ handleSetOption(string opName, int id, string value)
+	+ handleSetOption(Option op)
+	+ handleRegister()
+	+ handleUciNewGame()
+	+ handlePosition(string fenstring)
+	+ handlePosition(string fenstring, vector<forge::Move> & moveSequence)
+	+ handleGo(GoParams goParams)
+	+ handleStop()
+	+ handlePonderHit()
+	+ handleQuit()
+	
+UciClient : UciBase
+	// Messages which the client (engine) can send to the server (gui)
+	+ sendUci()
+	+ sendDebug(bool isOn)
+	+ sendIsReady()
+	+ sendSetOption(string opName, int id, string value)
+	+ sendSetOption(Option op)
+	+ sendRegister()
+	+ sendUciNewGame()
+	+ sendPosition(string fenstring)
+	+ sendPosition(string fenstring, vector<forge::Move> & moveSequence)
+	+ sendGo(GoParams goParams)
+	+ sendStop()
+	+ sendPonderHit()
+	+ sendQuit()
+
+	+ handle(string & message);
+	+ handleId(string name, string author)
+	+ handleUciok()
+	+ handleReadyOk()
+	+ handleBestMove(forge::Move bestMove, vector<forge::Move> ponderingMoves)
+	+ handleCopyProtection(CopyProtection copyProtection)
+	+ handleRegister(Registration registration)
+	+ handleInfo(Info info)
+	+ handleOption(Option op)	// ??? 
