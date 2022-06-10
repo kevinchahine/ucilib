@@ -122,10 +122,6 @@ public:
 
 // ----------------------------------------------------------------------------
 
-UciBase
-	- in - istream		// In comming stream
-	- out - ostream		// Out going stream
-
 UciServer : UciBase
 	+ sendId(string name, string author)
 	+ sendIdName(string name);

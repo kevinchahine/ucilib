@@ -1,0 +1,17 @@
+// UCI Finite state machine 
+// 
+// ex:
+
+int main()
+{
+	uci::client::StateMachine fsm;
+
+	boost::error_code ec;
+
+	fsm.open_engine("stockfish.exe", ec);	// spawn child process
+	fsm.
+
+	fsm.setState(uci::client::StateMachine::Init);
+	fsm.
+	return 0;
+}

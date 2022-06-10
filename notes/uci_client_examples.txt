@@ -1,0 +1,46 @@
+UCI Client Examples
+
+int main()
+{
+	uci::Client sf;
+	uci::Client lc;
+
+	sf.open("stockfish.exe");	// spawn enchine as child processes
+	lc.open("lco.exe");			// spawn enchine as child processes
+
+	sf.init();					// or should this be called from sf.open() ?
+	lc.init();					// or should this be called from sf.open() ?
+
+	while (true) 
+	{
+		sf.update();			// Run operations and return (non-blocking)
+		lc.update();			// Run operations and return (non-blocking)
+	}
+
+	sf.terminate();				// close child process
+	lc.terminate();				// close child process
+
+	return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+uci::Client::open(string engine_exe)
+{
+	this->engine = boost::process::child{engine_exe};
+
+	// error checking
+
+	this->stateMachine.toInit();	// set state to init
+}
+
+uci::Client::update()
+{
+	this->stateMachine.update();
+}
+
+uci::client::StateMachine::update()
+{
+	this->currentState.update();	// update() returns the next state that is to be transitioned to
+
+}

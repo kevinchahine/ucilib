@@ -96,6 +96,8 @@ server.sendInfo(...);	// Called asynchronously
 server.sendInfo(...);	// from deadline timer
 server.sendInfo(...);	// established by
 server.sendInfo(...);	// server.handleGo()
+									
+									sf.handleInfo();	// Async mux
 
 // Search stops or server sends stop command
 

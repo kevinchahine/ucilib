@@ -89,11 +89,11 @@ These are all the command the engine gets from the interface.
 	The substrings "value" and "name" should be avoided in <id> and <x> to allow unambiguous parsing,
 	for example do not use <name> = "draw value".
 	Here are some strings for the example below:
-	   "setoption name Nullmove value true\n"
-      "setoption name Selectivity value 3\n"
-	   "setoption name Style value Risky\n"
-	   "setoption name Clear Hash\n"
-	   "setoption name NalimovPath value c:\chess\tb\4;c:\chess\tb\5\n"
+		"setoption name Nullmove value true\n"
+		"setoption name Selectivity value 3\n"
+		"setoption name Style value Risky\n"
+		"setoption name Clear Hash\n"
+		"setoption name NalimovPath value c:\chess\tb\4;c:\chess\tb\5\n"
 
 * register
 	this is the command to try to register an engine or to tell the engine that registration
@@ -419,13 +419,11 @@ Engine to GUI:
 		a predefined value of this parameter is x
 	Examples:
     Here are 5 strings for each of the 5 possible types of options
-	   "option name Nullmove type check default true\n"
-      "option name Selectivity type spin default 2 min 0 max 4\n"
-	   "option name Style type combo default Normal var Solid var Normal var Risky\n"
-	   "option name NalimovPath type string default c:\\n"
-	   "option name Clear Hash type button\n"
-
-
+		"option name Nullmove type check default true\n"
+		"option name Selectivity type spin default 2 min 0 max 4\n"
+		"option name Style type combo default Normal var Solid var Normal var Risky\n"
+		"option name NalimovPath type string default c:\\n"
+		"option name Clear Hash type button\n"
 
 Examples:
 ---------

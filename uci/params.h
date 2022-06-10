@@ -4,11 +4,9 @@
 
 namespace uci
 {
-	class UciBase
-	{
-	public:
-
-	protected:
-	
+	enum Debug : bool {
+		on,
+		off,
 	};
+
 } // namespace uci

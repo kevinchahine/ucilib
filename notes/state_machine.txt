@@ -1,0 +1,17 @@
+// UCI Finite state machine 
+
+State			Server States							Client States
+				(GUI Side)								(Engine Size)
+Init			Spawn child process						Reads pipe from server and determines uci mode
+StartUp			Listen for "id name" and "id author"	Send "id name" and "id author"
+				Listen for which options are supported	Send which options are supported
+Options			Set engine options						Listen for options
+Wait			Wait for engine to finish initializing	Initialize parameters
+NewGame			Create a new game						Reset game data and start a new game
+NewPosition		Set the new position					Reset old position and set to new one
+Search			Wait for engine to search a position	Search a position
+				Listen for info messages				Send info messages periodically
+				Tell engine to stop search if necessary	Listen for stop command
+Commit			Get best move from engine				Send best move to engine
+
+
