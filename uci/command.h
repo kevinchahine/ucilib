@@ -6,39 +6,35 @@
 
 namespace uci
 {
-	class Command
+	class Command : public std::vector<std::string>
 	{
 	public:
 		// A valid command is one which was successfully parsed.
 		// An invalid command has an empty 1st token.
 		// In that case, remaining tokens are meaningless 
-		bool isValid() const { return tokens.size(); }
+		bool isValid() const { return this->size(); }
 		bool isInValid() const { return !isValid(); }
 
-		void setAsInvalid() { tokens.clear(); }
+		void setAsInvalid() { this->clear(); }
 
-		std::string& cmd() { return tokens.front(); }
-		const std::string& cmd() const { return tokens.front(); }
+		std::string& cmd() { return this->front(); }
+		const std::string& cmd() const { return this->front(); }
 
 		friend std::ostream& operator<<(std::ostream& os, const Command& cmd);
 
 		void parse(const std::string & line);
 
-		void parseRegex(const std::string& line);
-
 	private:
-		void parse_setoption(std::istream& is);
-		void parse_register(std::istream& is);
-		void parse_position(std::istream& is);
-		void parse_go(std::istream& is);
-		void parse_id(std::istream& is);
-		void parse_bestmove(std::istream& is);
-		void parse_copyprotection(std::istream& is);
-		void parse_registration(std::istream& is);
-		void parse_info(std::istream& is);
-		void parse_option(std::istream& is);
-
-	private:
-		std::vector<std::string> tokens;
+		
+		void parse_setoption(const std::string & line);
+		void parse_register(const std::string & line);
+		void parse_position(const std::string & line);
+		void parse_go(const std::string & line);
+		void parse_id(const std::string & line);
+		void parse_bestmove(const std::string & line);
+		void parse_copyprotection(const std::string & line);
+		void parse_registration(const std::string & line);
+		void parse_info(const std::string & line);
+		void parse_option(const std::string & line);
 	};
 } // namespace uci

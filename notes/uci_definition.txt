@@ -436,8 +436,8 @@ GUI     engine
 uci
 
 // engine identify  
-      id name Shredder
-		id author Stefan MK
+	id name Shredder
+	id author Stefan MK
 
 // engine sends the options it can change
 // the engine can change the hash size from 1 to 128 MB
