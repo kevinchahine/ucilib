@@ -25,12 +25,23 @@ namespace uci
 		void parse(const std::string & line);
 
 	private:
-		
-		void parse_setoption(const std::string & line);
+		// --- GUI commands (send by GUI) ---
+		void parse_uci(const std::string& line);
+		void parse_debug(const std::string& line);
+		void parse_isready(const std::string& line);
+		void parse_setoption(const std::string& line);
 		void parse_register(const std::string & line);
+		void parse_ucinewgame(const std::string& line);
 		void parse_position(const std::string & line);
 		void parse_go(const std::string & line);
+		void parse_stop(const std::string& line);
+		void parse_ponderhit(const std::string& line);
+		void parse_quit(const std::string& line);
+
+		// --- Engine commands (send by Engine) ---
 		void parse_id(const std::string & line);
+		void parse_uciok(const std::string& line);
+		void parse_readyok(const std::string& line);
 		void parse_bestmove(const std::string & line);
 		void parse_copyprotection(const std::string & line);
 		void parse_registration(const std::string & line);

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.21)
 set(LIBRARY_NAME ucilib)
 project(${LIBRARY_NAME})
 
+
 set(NOTES
 	notes/classes.txt
 	notes/example1.txt
@@ -16,9 +17,12 @@ set(NOTES
 set(UCI
 	uci/command.cpp
 	uci/command.h
-	uci/states.hpp
+	uci/option.cpp
+	uci/option.h
 	uci/params.cpp
 	uci/params.h
+	uci/states.hpp
+	uci/uci.hpp
 	uci/uci_base.cpp
 	uci/uci_base.h
 	uci/uci_client.cpp
@@ -95,6 +99,8 @@ add_library(${LIBRARY_NAME} STATIC
 	${STATES_SERVER}
 	${STATE_MACHINES}
 )
+
+target_compile_features(${LIBRARY_NAME} PRIVATE cxx_std_17)
 
 #include_directory(${LIBRARY_NAME} ..)
 

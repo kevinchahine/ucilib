@@ -1,6 +1,9 @@
 #pragma once
 
 #include "uci_base.h"
+#include "option.h"
+
+#include <boost/process/child.hpp>
 
 namespace uci
 {
@@ -17,9 +20,7 @@ namespace uci
 		UciClient& operator=(const UciClient&) = default;
 		UciClient& operator=(UciClient&&) noexcept = default;
 
-		// TODO: Change return to some error type
-		// TODO: Make data type boost::filesystem::path
-		void launch(const std::string& engineFilePath);
+		void launch(const std::string & engine_file_path);
 
 		void close();
 
@@ -27,6 +28,7 @@ namespace uci
 		void send_uci();
 		void send_debug(const Debug& debug);
 		void send_isready();
+		void send_setoption() {}	// TODO: remove this overload
 		//void send_setoption(const std::string opName, int id, const std::string& value);
 		//void send_setoption(const Option& op);
 		//void send_register(...);
@@ -40,6 +42,20 @@ namespace uci
 		void send_ponderhit();
 		void send_quit();
 
+		// Waits until a specific command is received from client (engine) before returning.
+		// Received command must be valid. Method will continue to block until a valid command is received
+		// and matches `cmd_to_wait_for`.
+		// Blocking call. 
+		void wait_for(const std::string& cmd_to_wait_for);
+		void wait_for_id();
+		void wait_for_uciok();
+		void wait_for_readyok();
+		void wait_for_bestmove();
+		void wait_for_copyprotection();
+		void wait_for_registration();
+		void wait_for_info();
+		void wait_for_option();
+
 		void handle(std::string & message);
 		void on_id(const std::string & key, const std::string & value);
 		void on_uciok();
@@ -51,6 +67,8 @@ namespace uci
 		void on_option(); 
 
 	protected:
+		boost::process::child engine;
+		
 		std::function<void()> on_id_callback;
 		std::function<void()> on_uciok_callback;
 		std::function<void()> on_readyok_callback;
@@ -60,9 +78,13 @@ namespace uci
 		std::function<void()> on_info_callback;
 		std::function<void()> on_option_callback;
 
-		//boost::process::child engine;
-
 		std::string name;
 		std::string author;
+		std::string bestmove;
+
+		// list of options that the engine supports.
+		// This list comes from the option commands that the engine sends after 
+		// receiving 'uci'
+		std::vector<option> options;
 	};
 } // namespace uci

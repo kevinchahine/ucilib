@@ -81,7 +81,8 @@ These are all the command the engine gets from the interface.
 	This command must always be answered with "readyok" and can be sent also when the engine is calculating
 	in which case the engine should also immediately answer with "readyok" without stopping the search.
 
-* setoption name <id> [value <x>]
+* set
+name <id> [value <x>]
 	this is sent to the engine when the user wants to change the internal parameters
 	of the engine. For the "button" type no value is needed.
 	One string will be sent for each parameter and this will only be sent when the engine is waiting.

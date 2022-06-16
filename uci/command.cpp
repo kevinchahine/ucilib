@@ -49,20 +49,52 @@ namespace uci
 		boost::algorithm::to_lower(cmd);
 
 		// --- Set Option ---
-		if (cmd == "setoption")				parse_setoption(line);
+		if (cmd == "uci")					parse_uci(line);
+		else if (cmd == "debug")			parse_debug(line);
+		else if (cmd == "isready")			parse_isready(line);
+		else if (cmd == "setoption")		parse_setoption(line);
 		else if (cmd == "register")			parse_register(line);
+		else if (cmd == "ucinewgame")		parse_ucinewgame(line);
 		else if (cmd == "position")			parse_position(line);
 		else if (cmd == "go")				parse_go(line);
+		else if (cmd == "stop")				parse_stop(line);
+		else if (cmd == "ponderhit")		parse_ponderhit(line);
+		else if (cmd == "quit")				parse_quit(line);
 		else if (cmd == "id")				parse_id(line);
+		else if (cmd == "uciok")			parse_uciok(line);
+		else if (cmd == "readyok")			parse_readyok(line);
 		else if (cmd == "bestmove")			parse_bestmove(line);
 		else if (cmd == "copyprotection")	parse_copyprotection(line);
 		else if (cmd == "registration")		parse_registration(line);
 		else if (cmd == "info")				parse_info(line);
 		else if (cmd == "option")			parse_option(line);
 		else {
-			cout << __FILE__ << " line " << __LINE__ << " line = \'" << line << "\'" << endl;
+		//	cout << "Error: " << __FILE__ << " line " << __LINE__ << " Invalid command: \'" << line << "\'" << endl;
 			setAsInvalid();
 		}
+	}
+
+	void Command::parse_uci(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "uci";
+	}
+
+	void Command::parse_debug(const std::string& line)
+	{
+		boost::regex regex(R"dil((debug)\s+(on|off))dil");
+
+		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2 });
+
+		parse_helper(*this, line, regex_it);
+	}
+
+	void Command::parse_isready(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "isready";
 	}
 
 	void Command::parse_setoption(const std::string& line)
@@ -110,6 +142,13 @@ namespace uci
 		}
 	}
 
+	void Command::parse_ucinewgame(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "ucinewgame";
+	}
+
 	void Command::parse_position(const std::string& line)
 	{
 		// expression: position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
@@ -152,7 +191,46 @@ namespace uci
 
 	void Command::parse_go(const std::string& line)
 	{
+		//		Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4"
 
+		//* go
+		//	* searchmoves <move1> .... <movei>
+		//	* ponder
+		//	* wtime <x>			<x> is a positive number (int or float? I dont know)
+		//	* btime <x>			...
+		//	* winc <x>			positive integer number
+		//	* binc <x>			...
+		//	* movestogo <x>		integer 
+		//	* depth <x>
+		//	* nodes <x>
+		//	* mate <x>
+		//	* movetime <x>
+		//	* infinite
+
+		vector<string> vec;
+
+		boost::split(vec, line, isspace);
+	}
+
+	void Command::parse_stop(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "stop";
+	}
+
+	void Command::parse_ponderhit(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "ponderhit";
+	}
+
+	void Command::parse_quit(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "quit";
 	}
 
 	void Command::parse_id(const std::string& line)
@@ -166,6 +244,20 @@ namespace uci
 		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3 });
 
 		parse_helper(*this, line, regex_it);
+	}
+
+	void Command::parse_uciok(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "uciok";
+	}
+
+	void Command::parse_readyok(const std::string& line)
+	{
+		this->resize(1);
+
+		this->front() = "readyok";
 	}
 
 	void Command::parse_bestmove(const std::string& line)
