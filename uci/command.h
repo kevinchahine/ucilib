@@ -1,5 +1,8 @@
 #pragma once
 
+#include "go.h"
+#include "option.h"
+
 #include <iostream>
 #include <string>
 #include <vector>

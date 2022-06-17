@@ -1,13 +1,14 @@
 #pragma once
 
-#include "uci_base.h"
+#include "go.h"
 #include "option.h"
+#include "uci_base.h"
 
 #include <boost/process/child.hpp>
 
 namespace uci
 {
-	// TODO: Why not call this Client (no Uci)
+	// TODO: Why not simply call this 'Client' (no Uci)
 	class UciClient : public UciBase
 	{
 	public:
@@ -33,11 +34,13 @@ namespace uci
 		//void send_setoption(const Option& op);
 		//void send_register(...);
 		void send_ucinewgame();
-		void send_position(const std::string fen);
 		//template<typename CONTAINER_T>
 		//void send_position(const std::string fen, const CONTAINER_T& moves_begin, const CONTAINER_T& moves_end);
-		//void send_position(const std::string fen, const std::vector<forge::Move>& moveSequence);
-		//void send_go(const GoParams& goParams);
+		void send_position();
+		// fen - fen representation of position (can be 'startpos')
+		void send_position(const std::string fen);
+		void send_position(const std::string fen, const std::vector<std::string>& moveSequence);
+		void send_go(const go & go_params);
 		void send_stop();
 		void send_ponderhit();
 		void send_quit();
@@ -46,15 +49,15 @@ namespace uci
 		// Received command must be valid. Method will continue to block until a valid command is received
 		// and matches `cmd_to_wait_for`.
 		// Blocking call. 
-		void wait_for(const std::string& cmd_to_wait_for);
-		void wait_for_id();
-		void wait_for_uciok();
-		void wait_for_readyok();
-		void wait_for_bestmove();
-		void wait_for_copyprotection();
-		void wait_for_registration();
-		void wait_for_info();
-		void wait_for_option();
+		const Command & wait_for(const std::string& cmd_to_wait_for);
+		const Command & wait_for_id();
+		const Command & wait_for_uciok();
+		const Command & wait_for_readyok();
+		const Command & wait_for_bestmove();
+		const Command & wait_for_copyprotection();
+		const Command & wait_for_registration();
+		const Command & wait_for_info();
+		const Command & wait_for_option();
 
 		void handle(std::string & message);
 		void on_id(const std::string & key, const std::string & value);

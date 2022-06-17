@@ -40,7 +40,7 @@ namespace uci
 				// TODO: Do this
 			}
 		}
-		
+
 		//boost::filesystem::path fromPath = boost::process::search_path(path);
 
 		//cout << "from path: " << fromPath << endl;
@@ -53,9 +53,9 @@ namespace uci
 
 		// --- 2.) Open engine ---
 		engine = boost::process::child{
-			engine_file_path, 
-			boost::process::std_out > is, 
-			boost::process::std_in < os 
+			engine_file_path,
+			boost::process::std_out > is,
+			boost::process::std_in < os
 		};
 
 		//std::string line;
@@ -101,9 +101,34 @@ namespace uci
 		os << "ucinewgame" << endl;
 	}
 
+	void UciClient::send_position()
+	{
+		os << "position startpos" << endl;
+	}
+
 	void UciClient::send_position(const string fen)
 	{
 		os << "position " << fen << endl;
+	}
+
+	void UciClient::send_position(const std::string fen, const std::vector<std::string>& moveSequence)
+	{
+		os << "position " << fen;
+
+		if (moveSequence.size()) {
+			os << " moves";
+
+			for (const std::string& move : moveSequence) {
+				os << ' ' << move;
+			}
+		}
+
+		os << endl;
+	}
+
+	void UciClient::send_go(const go& go_params)
+	{
+		os << go_params << endl;
 	}
 
 	void UciClient::send_stop()
@@ -123,7 +148,7 @@ namespace uci
 
 	// ----------------------------------- WAITS ---------------------------------
 
-	void UciClient::wait_for(const std::string& cmd_to_wait_for)
+	const Command & UciClient::wait_for(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
 			// Reads next line from input stream. 
@@ -140,23 +165,49 @@ namespace uci
 				}
 			}
 		}
+
+		return commands_in.back();
 	}
 
-	void UciClient::wait_for_id() { wait_for("id"); }
+	const Command & UciClient::wait_for_id() 
+	{
+		return wait_for("id");
+	}
 
-	void UciClient::wait_for_uciok() { wait_for("uciok"); }
+	const Command & UciClient::wait_for_uciok() 
+	{
+		return wait_for("uciok");
+	}
 
-	void UciClient::wait_for_readyok() { wait_for("readyok"); }
+	const Command & UciClient::wait_for_readyok()
+	{
+		return wait_for("readyok");
+	}
 
-	void UciClient::wait_for_bestmove() { wait_for("bestmove"); }
+	const Command & UciClient::wait_for_bestmove()
+	{
+		return wait_for("bestmove");
+	}
 
-	void UciClient::wait_for_copyprotection() { wait_for("copyprotection"); }
+	const Command & UciClient::wait_for_copyprotection() 
+	{
+		return wait_for("copyprotection");
+	}
 
-	void UciClient::wait_for_registration() { wait_for("registration"); }
+	const Command & UciClient::wait_for_registration() 
+	{
+		return wait_for("registration");
+	}
 
-	void UciClient::wait_for_info() { wait_for("info"); }
+	const Command & UciClient::wait_for_info() 
+	{
+		return wait_for("info");
+	}
 
-	void UciClient::wait_for_option() { wait_for("option"); }
+	const Command & UciClient::wait_for_option()
+	{
+		return wait_for("option");
+	}
 
 	// ----------------------------------- CALLBACKS -----------------------------
 

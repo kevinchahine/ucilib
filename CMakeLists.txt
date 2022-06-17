@@ -17,10 +17,10 @@ set(NOTES
 set(UCI
 	uci/command.cpp
 	uci/command.h
+	uci/go.cpp
+	uci/go.h
 	uci/option.cpp
 	uci/option.h
-	uci/params.cpp
-	uci/params.h
 	uci/states.hpp
 	uci/uci.hpp
 	uci/uci_base.cpp
