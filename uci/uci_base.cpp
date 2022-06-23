@@ -4,9 +4,9 @@ using namespace std;
 
 namespace uci
 {
-	void UciBase::getline()
+	void UciBase::parse_line(istream & is)
 	{
-		// --- get line from stream (blocking) ---
+		// --- get currline from stream (blocking) ---
 		std::string line;
 
 		if (is && std::getline(is, line) && !line.empty()) {

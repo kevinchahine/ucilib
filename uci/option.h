@@ -11,17 +11,6 @@ namespace uci
 	class option
 	{
 	public:
-
-		friend std::ostream& operator<<(std::ostream& os, const option& op)
-		{
-			os << "name " << op.name << " value " << op.value;
-
-			return os;
-		}
-
-	private:
-		std::string name;
-		std::string value;
 	};
 
 	// ------------------------- OPTION TYPES ------------------------------------
@@ -130,7 +119,7 @@ namespace uci
 		}
 
 		std::optional<std::string> default_val;
-		std::optional<std::string> var;	// TODO: not sure if this should exist
+		std::optional<std::string> var;
 	};
 
 	// ---------------------- OPTIONS --------------------------------------------
@@ -140,11 +129,13 @@ namespace uci
 	public:
 		friend std::ostream& operator<<(std::ostream& os, const hash_option& op)
 		{
-			os << "option name Hash "
+			os << "option name Hash value "
 				<< static_cast<const spin_option&>(op);
 
 			return os;
 		}
+
+		std::optional<std::string> var;	// TODO: not sure if this should exist
 	};
 
 	class nalimov_path_option : public spin_option

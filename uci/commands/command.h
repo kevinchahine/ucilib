@@ -1,7 +1,9 @@
 #pragma once
 
-#include "go.h"
-#include "option.h"
+#include "uci/go.h"
+#include "uci/info.h"
+#include "uci/option.h"
+#include "uci/setoption.h"
 
 #include <iostream>
 #include <string>
@@ -26,9 +28,39 @@ namespace uci
 		friend std::ostream& operator<<(std::ostream& os, const Command& cmd);
 
 		void parse(const std::string & line);
+		
+		bool is_cmd(const std::string& cmd);
+		bool is_uci() const;
+		bool is_debug() const;
+		bool is_isready() const;
+		bool is_setoption() const;
+		bool is_register() const;
+		bool is_ucinewgame() const;
+		bool is_position() const;
+		bool is_go() const;
+		bool is_stop() const;
+		bool is_ponderhit() const;
+		bool is_quit() const;
+		bool is_id() const;
+		bool is_uciok() const;
+		bool is_readyok() const;
+		bool is_bestmove() const;
+		bool is_copyprotection() const;
+		bool is_registration() const;
+		bool is_info() const;
+		bool is_option() const;
+
+		bool to_debug() const;
+		setoption to_setoption() const;
+		option to_option() const;
+		void to_position() const;
+		go to_go() const;
+		void to_id() const;
+		std::string to_bestmove() const;
+		info to_info() const;
 
 	private:
-		// --- GUI commands (send by GUI) ---
+		// --- GUI commands (sent by GUI) ---
 		void parse_uci(const std::string& line);
 		void parse_debug(const std::string& line);
 		void parse_isready(const std::string& line);
@@ -41,7 +73,7 @@ namespace uci
 		void parse_ponderhit(const std::string& line);
 		void parse_quit(const std::string& line);
 
-		// --- Engine commands (send by Engine) ---
+		// --- Engine commands (sent by Engine) ---
 		void parse_id(const std::string & line);
 		void parse_uciok(const std::string& line);
 		void parse_readyok(const std::string& line);

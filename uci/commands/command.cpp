@@ -38,7 +38,7 @@ namespace uci
 
 	void Command::parse(const string& line)
 	{
-		// --- 0.) Clear existing tokesn and puse line into a stream ---
+		// --- 0.) Clear existing tokesn and puse currline into a stream ---
 		this->clear();
 		istringstream is(line);
 
@@ -69,10 +69,139 @@ namespace uci
 		else if (cmd == "info")				parse_info(line);
 		else if (cmd == "option")			parse_option(line);
 		else {
-		//	cout << "Error: " << __FILE__ << " line " << __LINE__ << " Invalid command: \'" << line << "\'" << endl;
+		//	cout << "Error: " << __FILE__ << " currline " << __LINE__ << " Invalid command: \'" << currline << "\'" << endl;
 			setAsInvalid();
 		}
 	}
+
+	// -------------------------------- IS COMMAND ----------------------------
+
+    bool Command::is_cmd(const std::string& cmd)
+    {
+        return this->cmd() == cmd;
+    }
+
+    bool Command::is_uci() const
+    {
+        return this->cmd() == "uci";
+    }
+
+    bool Command::is_debug() const
+    {
+        return this->cmd() == "debug";
+    }
+
+    bool Command::is_isready() const
+    {
+        return this->cmd() == "isready";
+    }
+
+    bool Command::is_setoption() const
+    {
+        return this->cmd() == "setoption";
+    }
+
+    bool Command::is_register() const
+    {
+        return this->cmd() == "register";
+    }
+
+    bool Command::is_ucinewgame() const
+    {
+        return this->cmd() == "ucinewgame";
+    }
+
+    bool Command::is_position() const
+    {
+        return this->cmd() == "position";
+    }
+
+    bool Command::is_go() const
+    {
+        return this->cmd() == "go";
+    }
+
+    bool Command::is_stop() const
+    {
+        return this->cmd() == "stop";
+    }
+
+    bool Command::is_ponderhit() const
+    {
+        return this->cmd() == "ponderhit";
+    }
+
+    bool Command::is_quit() const
+    {
+        return this->cmd() == "quit";
+    }
+
+    bool Command::is_id() const
+    {
+        return this->cmd() == "id";
+    }
+
+    bool Command::is_uciok() const
+    {
+        return this->cmd() == "uciok";
+    }
+
+    bool Command::is_readyok() const
+    {
+        return this->cmd() == "readyok";
+    }
+
+    bool Command::is_bestmove() const
+    {
+        return this->cmd() == "bestmove";
+    }
+
+    bool Command::is_copyprotection() const
+    {
+        return this->cmd() == "copyprotection";
+    }
+
+    bool Command::is_registration() const
+    {
+        return this->cmd() == "registration";
+    }
+
+    bool Command::is_info() const
+    {
+        return this->cmd() == "info";
+    }
+
+    bool Command::is_option() const
+    {
+        return this->cmd() == "option";
+    }
+
+	bool Command::to_debug() const
+	{
+		const string& d = (*this)[1];
+
+		if (d == "on") {
+			return true;
+		}
+		else if (d == "off") {
+			return false;
+		}
+		else {
+			// Throw exception or just ignore
+			return false;
+		}
+	}
+
+	option Command::to_option() const
+	{
+		option op;
+
+		
+
+		return op;
+	}
+
+	// -------------------------------- PARSE ---------------------------------
 
 	void Command::parse_uci(const std::string& line)
 	{
@@ -191,9 +320,9 @@ namespace uci
 
 	void Command::parse_go(const std::string& line)
 	{
-		//		Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4"
+		// Example: After "position startpos" and "go infinite searchmoves e2e4 d2d4"
 
-		//* go
+		// * go
 		//	* searchmoves <move1> .... <movei>
 		//	* ponder
 		//	* wtime <x>			<x> is a positive number (int or float? I dont know)
@@ -210,6 +339,8 @@ namespace uci
 		vector<string> vec;
 
 		boost::split(vec, line, isspace);
+
+		// TODO: Finish this
 	}
 
 	void Command::parse_stop(const std::string& line)

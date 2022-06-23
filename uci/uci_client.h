@@ -3,8 +3,10 @@
 #include "go.h"
 #include "option.h"
 #include "uci_base.h"
+#include "debug.h"
 
 #include <boost/process/child.hpp>
+#include <boost/process/pipe.hpp>
 
 namespace uci
 {
@@ -49,37 +51,40 @@ namespace uci
 		// Received command must be valid. Method will continue to block until a valid command is received
 		// and matches `cmd_to_wait_for`.
 		// Blocking call. 
-		const Command & wait_for(const std::string& cmd_to_wait_for);
-		const Command & wait_for_id();
-		const Command & wait_for_uciok();
-		const Command & wait_for_readyok();
-		const Command & wait_for_bestmove();
-		const Command & wait_for_copyprotection();
-		const Command & wait_for_registration();
-		const Command & wait_for_info();
-		const Command & wait_for_option();
+		const Command & recv(const std::string& cmd_to_wait_for);
+		const Command & recv_id();
+		const Command & recv_uciok();
+		const Command & recv_readyok();
+		const Command & recv_bestmove();
+		const Command & recv_copyprotection();
+		const Command & recv_registration();
+		const Command & recv_info();
+		const Command & recv_option();
 
-		void handle(std::string & message);
-		void on_id(const std::string & key, const std::string & value);
-		void on_uciok();
-		void on_readyok();
-		void on_bestmove();
-		void on_copyprotection();
-		void on_register();
-		void on_info();
-		void on_option(); 
+		//void handle(std::string & message);
+		//void on_id();
+		//void on_uciok();
+		//void on_readyok();
+		//void on_bestmove();
+		//void on_copyprotection();
+		//void on_register();
+		//void on_info();
+		//void on_option(); 
 
 	protected:
 		boost::process::child engine;
+	
+		boost::process::ipstream is;
+		boost::process::opstream os;
 		
-		std::function<void()> on_id_callback;
-		std::function<void()> on_uciok_callback;
-		std::function<void()> on_readyok_callback;
-		std::function<void()> on_bestmove_callback;
-		std::function<void()> on_copyprotection_callback;
-		std::function<void()> on_register_callback;
-		std::function<void()> on_info_callback;
-		std::function<void()> on_option_callback;
+		//std::function<void()> on_id_callback;
+		//std::function<void()> on_uciok_callback;
+		//std::function<void()> on_readyok_callback;
+		//std::function<void()> on_bestmove_callback;
+		//std::function<void()> on_copyprotection_callback;
+		//std::function<void()> on_register_callback;
+		//std::function<void()> on_info_callback;
+		//std::function<void()> on_option_callback;
 
 		std::string name;
 		std::string author;

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "params.h"
-#include "command.h"
+#include "commands/command.h"
 
 #include <functional>
 #include <iostream>
@@ -42,16 +41,16 @@ namespace uci
 	protected:
 		// reads characters from `is` stream parses into a command and 
 		// pushes to `commands_in` list
-		// blocking call. function blocks until entire line is read from input stream
+		// blocking call. function blocks until entire currline is read from input stream
 		// Only valid commands will be inserted into `commands_in`
 		// Invalid commands will be ignored
-		void getline();
+		void parse_line(std::istream& is);
 
 	protected:
 		//std::istream is;	// stream from remote process
 		//std::ostream os;	// stream to   remote process
-		boost::process::ipstream is;
-		boost::process::opstream os;
+		//boost::process::ipstream is;
+		//boost::process::opstream os;
 
 		// commands are appended to back on list (push_back() emplace_back())
 		// commands are removed and handled from front of list

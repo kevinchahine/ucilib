@@ -58,10 +58,10 @@ namespace uci
 			boost::process::std_in < os
 		};
 
-		//std::string line;
+		//std::string currline;
 		//
-		//while (is && std::getline(is, line) && !line.empty()) {
-		//	std::cerr << "\'" << line << "\'" << std::endl;
+		//while (is && std::getline(is, currline) && !currline.empty()) {
+		//	std::cerr << "\'" << currline << "\'" << std::endl;
 		//}
 		//
 		//cout << "done" << endl;
@@ -148,14 +148,14 @@ namespace uci
 
 	// ----------------------------------- WAITS ---------------------------------
 
-	const Command & UciClient::wait_for(const std::string& cmd_to_wait_for)
+	const Command & UciClient::recv(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
-			// Reads next line from input stream. 
-			// Blocking call. Blocks until entire line is read.
-			// If line is a valid command, it will be appended to back of `commands_in`
+			// Reads next currline from input stream. 
+			// Blocking call. Blocks until entire currline is read.
+			// If currline is a valid command, it will be appended to back of `commands_in`
 			// Invalid commands will be deleted and method will return
-			this->getline();
+			this->parse_line(is);
 
 			if (commands_in.size()) {
 				const Command& cmd = commands_in.back();
@@ -169,128 +169,46 @@ namespace uci
 		return commands_in.back();
 	}
 
-	const Command & UciClient::wait_for_id() 
+	const Command & UciClient::recv_id() 
 	{
-		return wait_for("id");
+		return recv("id");
 	}
 
-	const Command & UciClient::wait_for_uciok() 
+	const Command & UciClient::recv_uciok() 
 	{
-		return wait_for("uciok");
+		return recv("uciok");
 	}
 
-	const Command & UciClient::wait_for_readyok()
+	const Command & UciClient::recv_readyok()
 	{
-		return wait_for("readyok");
+		return recv("readyok");
 	}
 
-	const Command & UciClient::wait_for_bestmove()
+	const Command & UciClient::recv_bestmove()
 	{
-		return wait_for("bestmove");
+		return recv("bestmove");
 	}
 
-	const Command & UciClient::wait_for_copyprotection() 
+	const Command & UciClient::recv_copyprotection() 
 	{
-		return wait_for("copyprotection");
+		return recv("copyprotection");
 	}
 
-	const Command & UciClient::wait_for_registration() 
+	const Command & UciClient::recv_registration() 
 	{
-		return wait_for("registration");
+		return recv("registration");
 	}
 
-	const Command & UciClient::wait_for_info() 
+	const Command & UciClient::recv_info() 
 	{
-		return wait_for("info");
+		return recv("info");
 	}
 
-	const Command & UciClient::wait_for_option()
+	const Command & UciClient::recv_option()
 	{
-		return wait_for("option");
+		return recv("option");
 	}
 
 	// ----------------------------------- CALLBACKS -----------------------------
 
-	void UciClient::handle(string& message)
-	{
-		// --- 1.) Parse Command ---
-		string::iterator start = find_if(message.begin(), message.end(), isalpha);
-		string::iterator stop = find(start, message.end(), ' ');
-		string command(start, stop);
-
-		// --- 2.) Call appropriate command ---
-		/**/ if (command == "id") {
-			start = find_if(message.begin(), message.end(), isalpha);
-			stop = find(start, message.end(), ' ');
-
-			string key(start, stop);
-
-			string::iterator start = find_if(stop, message.end(), isalnum);
-			string value(start, message.end());
-
-			on_id(key, value);
-		}
-		else if (command == "uciok") {
-			on_uciok();
-		}
-		else if (command == "readyok") {
-
-		}
-		else if (command == "bestmove") {
-
-		}
-		else if (command == "copyprotection") {
-
-		}
-		else if (command == "register") {
-
-		}
-		else if (command == "info") {
-
-		}
-		else if (command == "option") {
-
-		}
-	}
-
-	void UciClient::on_id(const std::string& key, const std::string& value)
-	{
-		if (key == "name") {
-			this->name = value;
-		}
-		else if (key == "author") {
-			this->author = value;
-		}
-
-		on_id_callback();
-	}
-
-	void UciClient::on_uciok()
-	{
-		on_uciok_callback();
-	}
-
-	void UciClient::on_readyok()
-	{
-	}
-
-	void UciClient::on_bestmove()
-	{
-	}
-
-	void UciClient::on_copyprotection()
-	{
-	}
-
-	void UciClient::on_register()
-	{
-	}
-
-	void UciClient::on_info()
-	{
-	}
-
-	void UciClient::on_option()
-	{
-	}
 } // namespace uci
