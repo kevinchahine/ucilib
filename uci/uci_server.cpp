@@ -10,6 +10,8 @@ using namespace std;
 
 namespace uci
 {
+	// -------------------------------- 
+
 	// -------------------------------- SEND ----------------------------------
 
     void UciServer::send_id(const string & name, const string & author)
