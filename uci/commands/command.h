@@ -2,8 +2,8 @@
 
 #include "uci/go.h"
 #include "uci/info.h"
-#include "uci/option.h"
-#include "uci/setoption.h"
+#include "uci/options/option.h"
+#include "uci/options/setoption.h"
 
 #include <iostream>
 #include <string>
@@ -52,7 +52,7 @@ namespace uci
 
 		bool to_debug() const;
 		setoption to_setoption() const;
-		option to_option() const;
+		//option to_option() const;
 		void to_position() const;
 		go to_go() const;
 		void to_id() const;

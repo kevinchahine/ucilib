@@ -2,8 +2,9 @@
 
 #include "uci_base.h"
 
-#include "info.h"
-#include "option.h"
+#include "uci/info.h"
+#include "uci/options/option.h"
+#include "uci/options/option_list.h"
 
 namespace uci
 {
@@ -71,17 +72,17 @@ namespace uci
 		//void handle(const std::string& message);
 
 		// Callbacks
-		//void on_uci(const Command & cmd);
-		//void on_debug(const Command & cmd);
-		//void on_isready(const Command & cmd);
-		//void on_setoption(const Command & cmd);
-		//void on_register(const Command & cmd);
-		//void on_ucinewgame(const Command & cmd);
-		//void on_position(const Command & cmd);
-		//void on_go(const Command & cmd);
-		//void on_stop(const Command & cmd);
-		//void on_ponderhit(const Command & cmd);
-		//void on_quit(const Command & cmd);
+		void on_uci(const Command & cmd);
+		void on_debug(const Command & cmd);
+		void on_isready(const Command & cmd);
+		void on_setoption(const Command & cmd);
+		void on_register(const Command & cmd);
+		void on_ucinewgame(const Command & cmd);
+		void on_position(const Command & cmd);
+		void on_go(const Command & cmd);
+		void on_stop(const Command & cmd);
+		void on_ponderhit(const Command & cmd);
+		void on_quit(const Command & cmd);
 
 	protected:
 
@@ -91,6 +92,10 @@ namespace uci
 		std::istream & is;
 
 		bool is_quit_received = false;
+
+		// List of all options which the server (GUI) has set
+		// through 'setoption' commands
+		//option_list option_settings;
 	};
 	
 	template<class OPTION_T>

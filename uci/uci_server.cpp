@@ -134,4 +134,15 @@ namespace uci
 		return recv("quit");
 	}
 
+	// -------------------------------- CALLBACKS -----------------------------
+
+    void UciServer::on_setoption(const Command& cmd)
+    {
+		// --- 1.) Generate an option object from command ---
+		//option op;
+
+		// --- 2.) Push option object to list ---
+		//option_settings.push_back(op);
+    }
+
 } // namespace uci

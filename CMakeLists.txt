@@ -21,6 +21,16 @@ set(NOTES
 	notes/uci_definition.txt
 )
 
+set(OPTIONS
+	"options/option.cpp"
+	"options/option.h"
+	"options/option_list.cpp"
+	"options/option_list.h"
+	"options/option_factory.cpp"
+	"options/option_factory.h"
+	"options/setoption.h"
+)
+
 set(UCI
 	uci/debug.cpp
 	uci/debug.h
@@ -28,9 +38,6 @@ set(UCI
 	uci/go.h
 	uci/info.cpp
 	uci/info.h
-	uci/option.cpp
-	uci/option.h
-	uci/setoption.h
 	uci/uci.hpp
 	uci/uci_base.cpp
 	uci/uci_base.h
@@ -104,6 +111,7 @@ set(STATE_MACHINES
 add_library(${LIBRARY_NAME} STATIC 
 	${COMMANDS}
 	${NOTES}
+	${OPTIONS}
 	${UCI}
 	${STATES}
 	${STATES_CLIENT}
@@ -113,11 +121,11 @@ add_library(${LIBRARY_NAME} STATIC
 
 target_compile_features(${LIBRARY_NAME} PRIVATE cxx_std_17)
 
-
 include_directories(${LIBRARY_NAME}	".")
 
 source_group(commands FILES ${COMMANDS})
 source_group(notes FILES ${NOTES})
+source_group("options" FILES ${OPTIONS})
 source_group(states FILES ${STATES})
 source_group(states/client FILES ${STATES_CLIENT})
 source_group(states/server FILES ${STATES_SERVER})

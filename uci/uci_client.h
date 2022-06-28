@@ -1,9 +1,10 @@
 #pragma once
 
-#include "go.h"
-#include "option.h"
-#include "uci_base.h"
-#include "debug.h"
+#include "uci/go.h"
+#include "uci/options/option.h"
+#include "uci/options/option_list.h"
+#include "uci/uci_base.h"
+#include "uci/debug.h"
 
 #include <boost/process/child.hpp>
 #include <boost/process/pipe.hpp>
@@ -93,6 +94,6 @@ namespace uci
 		// list of options that the engine supports.
 		// This list comes from the option commands that the engine sends after 
 		// receiving 'uci'
-		std::vector<option> options;
+		//option_list options;
 	};
 } // namespace uci

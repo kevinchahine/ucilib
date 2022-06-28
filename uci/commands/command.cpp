@@ -192,14 +192,14 @@ namespace uci
 		}
 	}
 
-	option Command::to_option() const
-	{
-		option op;
-
-		
-
-		return op;
-	}
+	//option Command::to_option() const
+	//{
+	//	option op;
+	//
+	//	
+	//
+	//	return op;
+	//}
 
 	// -------------------------------- PARSE ---------------------------------
 
