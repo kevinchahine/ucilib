@@ -1,5 +1,6 @@
 #include "command.h"
 
+#include <algorithm>
 #include <sstream>
 
 #include <boost/algorithm/string.hpp>
@@ -30,10 +31,21 @@ namespace uci
 	ostream& operator<<(ostream& os, const Command& cmd)
 	{
 		for (const string& token : cmd) {
-			os << "\'" << token << "\' ";
+			os << token << ' ';
 		}
 
 		return os;
+	}
+
+	std::string Command::to_quoted_string() const
+	{
+		stringstream ss;
+
+		for (const string& token : *this) {
+			ss << '\'' << token << "\' ";
+		}
+
+		return ss.str();
 	}
 
 	void Command::parse(const string& line)
@@ -519,20 +531,16 @@ namespace uci
 
 		parse_helper(*this, line, regex_it);
 
-		//if (this->size()) {
-		//	string last = move(this->back());
-		//	this->pop_back();
-		//
-		//	regex = boost::regex(R"dil((default|min|max|var)\s+(\w+)\s+(.*))dil");
-		//
-		//	regex_it = boost::sregex_token_iterator(last.begin(), last.end(), regex, { 1, 2, 3 });
-		//	boost::sregex_token_iterator end;
-		//
-		//	while (regex_it != end) {
-		//		this->emplace_back(*regex_it);
-		//
-		//		++regex_it;
-		//	}
-		//}
+		if (this->size() == 6) {
+			string last = std::move(this->back());
+			this->pop_back();
+
+			vector<string> temp;
+			boost::split(temp, last, boost::is_space());
+
+			for (string& str : temp) {
+				this->emplace_back(move(str));
+			}
+		}
 	}
 } // namespace uci

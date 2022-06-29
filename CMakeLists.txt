@@ -24,10 +24,10 @@ set(NOTES
 set(OPTIONS
 	"options/option.cpp"
 	"options/option.h"
-	"options/option_list.cpp"
-	"options/option_list.h"
-	"options/option_factory.cpp"
-	"options/option_factory.h"
+	"options/list.cpp"
+	"options/list.h"
+	"options/factory.cpp"
+	"options/factory.h"
 	"options/setoption.h"
 )
 

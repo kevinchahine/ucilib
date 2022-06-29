@@ -6,16 +6,23 @@
 #include <list>
 #include <optional>
 #include <memory>
+#include <vector>
+#include <cassert>
+#include <typeinfo>
 
 namespace uci
 {
+	// --- forward declarations ---
+	class Command;
+
 	namespace options
 	{
 		class base
 		{
 		public:
 			virtual std::string to_string() const = 0;
-
+			
+			virtual void fill_from(const Command & cmd) = 0;
 		public:
 		};
 
@@ -24,15 +31,17 @@ namespace uci
 		class check : public base
 		{
 		public:
+			virtual void fill_from(const Command & cmd) override;
+
 			friend std::ostream& operator<<(std::ostream& os, const check& op)
 			{
 				os << "type check";
 
 				if (op.default_val)
-					os << " default " << op.default_val.value();
+					os << " default " << (op.default_val.value() ? "true" : "false");
 
 				if (op.var)
-					os << " var " << op.var.value();
+					os << " var " << (op.var.value() ? "true" : "false");
 
 				return os;
 			}
@@ -44,6 +53,8 @@ namespace uci
 		class spin : public base
 		{
 		public:
+			virtual void fill_from(const Command & cmd) override;
+			
 			friend std::ostream& operator<<(std::ostream& os, const spin& op)
 			{
 				os << "type spin";
@@ -76,6 +87,8 @@ namespace uci
 		class combo : public base
 		{
 		public:
+			virtual void fill_from(const Command& cmd) override;
+		
 			friend std::ostream& operator<<(std::ostream& os, const combo& op)
 			{
 				os << "type combo";
@@ -99,6 +112,8 @@ namespace uci
 		class button : public base
 		{
 		public:
+			virtual void fill_from(const Command& cmd) override;
+			
 			friend std::ostream& operator<<(std::ostream& os, const button& op)
 			{
 				os << "type button";
@@ -110,6 +125,8 @@ namespace uci
 		class string : public base
 		{
 		public:
+			virtual void fill_from(const Command& cmd) override;
+			
 			friend std::ostream& operator<<(std::ostream& os, const string& op)
 			{
 				os << "type string";
@@ -144,7 +161,7 @@ namespace uci
 
 			friend std::ostream& operator<<(std::ostream& os, const hash& op)
 			{
-				os << "option name Hash value "
+				os << "option name Hash "
 					<< static_cast<const spin&>(op);
 
 				return os;
@@ -153,7 +170,7 @@ namespace uci
 			std::optional<std::string> var;	// TODO: not sure if this should exist
 		};
 
-		class nalimov_path : public spin
+		class nalimov_path : public string
 		{
 		public:
 			virtual std::string to_string() const override
@@ -168,7 +185,7 @@ namespace uci
 			friend std::ostream& operator<<(std::ostream& os, const nalimov_path& op)
 			{
 				os << "option name NalimovPath "
-					<< static_cast<const spin&>(op);
+					<< static_cast<const string&>(op);
 
 				return os;
 			}
@@ -457,16 +474,30 @@ namespace uci
 		{
 		public:
 			option() = default;
+			
 			//option(const option& op) :		// TODO: implement copy methods and clone()
 			//	ptr(op.ptr->clone()) {}
+			
+			template<class OPTION_T>
+			
+			option(const OPTION_T& op) :
+				ptr(std::make_unique<OPTION_T>(op)) 
+			{
+				static_assert(std::is_base_of<options::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
+			}
+			
 			option(option&&) noexcept = default;
 			virtual ~option() noexcept = default;
+			
 			//option& operator=(const option&) = default;
+			
 			option& operator=(option&&) noexcept = default;
 		
 			template<class OPTION_T>
 			option& operator=(const OPTION_T& op)
 			{
+				static_assert(std::is_base_of<options::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
+				
 				this->ptr = std::make_unique<OPTION_T>(op);
 
 				return *this;
@@ -489,6 +520,8 @@ namespace uci
 			{
 				return dynamic_cast<const OPTION_T*>(ptr.get()) != nullptr;
 			}
+
+			void fill_from(const Command& cmd);
 
 			std::string to_string() const
 			{

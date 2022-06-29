@@ -2,7 +2,7 @@
 
 #include "uci/go.h"
 #include "uci/options/option.h"
-#include "uci/options/option_list.h"
+#include "uci/options/list.h"
 #include "uci/uci_base.h"
 #include "uci/debug.h"
 

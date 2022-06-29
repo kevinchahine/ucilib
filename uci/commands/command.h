@@ -25,6 +25,8 @@ namespace uci
 		std::string& cmd() { return this->front(); }
 		const std::string& cmd() const { return this->front(); }
 
+		std::string to_quoted_string() const;
+
 		friend std::ostream& operator<<(std::ostream& os, const Command& cmd);
 
 		void parse(const std::string & line);
