@@ -88,17 +88,20 @@ namespace uci
 		{
 			this->default_val.reset();
 
-			for (size_t token_index = 5; token_index + 1 < cmd.size(); token_index += 2) {
-				const std::string& attrib_type = cmd.at(token_index);
-				const std::string& attrib_value = cmd.at(token_index + 1);
+			const std::string& attrib_type = cmd.at(5);
+			const std::string& attrib_value = cmd.at(6);
 
-				if (attrib_type == "default") {
-					this->default_val = attrib_value;
-				}
+			if (attrib_type == "default") {
+				this->default_val = attrib_value;
 			}
 		}
 
-		void option::fill_from(const Command& cmd)
+        option::option(const Command& cmd)
+        {
+			this->fill_from(cmd);
+        }
+
+        void option::fill_from(const Command& cmd)
 		{
 			if (cmd.is_option() == false) {
 				cout << "error: " << cmd << " is not an option command" << endl;

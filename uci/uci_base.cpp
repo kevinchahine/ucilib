@@ -24,4 +24,15 @@ namespace uci
 			}
 		}
 	}
+
+	void UciBase::init()
+	{
+		// ------------------ DISPATCH CALLBACKS ------------------------------
+
+	}
+
+	void UciBase::update()
+	{
+		context.poll();
+	}
 } // namespace uci

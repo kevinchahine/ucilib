@@ -81,112 +81,112 @@ namespace uci
 		else if (cmd == "info")				parse_info(line);
 		else if (cmd == "option")			parse_option(line);
 		else {
-		//	cout << "Error: " << __FILE__ << " currline " << __LINE__ << " Invalid command: \'" << currline << "\'" << endl;
+			//	cout << "Error: " << __FILE__ << " currline " << __LINE__ << " Invalid command: \'" << currline << "\'" << endl;
 			setAsInvalid();
 		}
 	}
 
 	// -------------------------------- IS COMMAND ----------------------------
 
-    bool Command::is_cmd(const std::string& cmd)
-    {
-        return this->cmd() == cmd;
-    }
+	bool Command::is_cmd(const std::string& cmd)
+	{
+		return this->cmd() == cmd;
+	}
 
-    bool Command::is_uci() const
-    {
-        return this->cmd() == "uci";
-    }
+	bool Command::is_uci() const
+	{
+		return this->cmd() == "uci";
+	}
 
-    bool Command::is_debug() const
-    {
-        return this->cmd() == "debug";
-    }
+	bool Command::is_debug() const
+	{
+		return this->cmd() == "debug";
+	}
 
-    bool Command::is_isready() const
-    {
-        return this->cmd() == "isready";
-    }
+	bool Command::is_isready() const
+	{
+		return this->cmd() == "isready";
+	}
 
-    bool Command::is_setoption() const
-    {
-        return this->cmd() == "setoption";
-    }
+	bool Command::is_setoption() const
+	{
+		return this->cmd() == "setoption";
+	}
 
-    bool Command::is_register() const
-    {
-        return this->cmd() == "register";
-    }
+	bool Command::is_register() const
+	{
+		return this->cmd() == "register";
+	}
 
-    bool Command::is_ucinewgame() const
-    {
-        return this->cmd() == "ucinewgame";
-    }
+	bool Command::is_ucinewgame() const
+	{
+		return this->cmd() == "ucinewgame";
+	}
 
-    bool Command::is_position() const
-    {
-        return this->cmd() == "position";
-    }
+	bool Command::is_position() const
+	{
+		return this->cmd() == "position";
+	}
 
-    bool Command::is_go() const
-    {
-        return this->cmd() == "go";
-    }
+	bool Command::is_go() const
+	{
+		return this->cmd() == "go";
+	}
 
-    bool Command::is_stop() const
-    {
-        return this->cmd() == "stop";
-    }
+	bool Command::is_stop() const
+	{
+		return this->cmd() == "stop";
+	}
 
-    bool Command::is_ponderhit() const
-    {
-        return this->cmd() == "ponderhit";
-    }
+	bool Command::is_ponderhit() const
+	{
+		return this->cmd() == "ponderhit";
+	}
 
-    bool Command::is_quit() const
-    {
-        return this->cmd() == "quit";
-    }
+	bool Command::is_quit() const
+	{
+		return this->cmd() == "quit";
+	}
 
-    bool Command::is_id() const
-    {
-        return this->cmd() == "id";
-    }
+	bool Command::is_id() const
+	{
+		return this->cmd() == "id";
+	}
 
-    bool Command::is_uciok() const
-    {
-        return this->cmd() == "uciok";
-    }
+	bool Command::is_uciok() const
+	{
+		return this->cmd() == "uciok";
+	}
 
-    bool Command::is_readyok() const
-    {
-        return this->cmd() == "readyok";
-    }
+	bool Command::is_readyok() const
+	{
+		return this->cmd() == "readyok";
+	}
 
-    bool Command::is_bestmove() const
-    {
-        return this->cmd() == "bestmove";
-    }
+	bool Command::is_bestmove() const
+	{
+		return this->cmd() == "bestmove";
+	}
 
-    bool Command::is_copyprotection() const
-    {
-        return this->cmd() == "copyprotection";
-    }
+	bool Command::is_copyprotection() const
+	{
+		return this->cmd() == "copyprotection";
+	}
 
-    bool Command::is_registration() const
-    {
-        return this->cmd() == "registration";
-    }
+	bool Command::is_registration() const
+	{
+		return this->cmd() == "registration";
+	}
 
-    bool Command::is_info() const
-    {
-        return this->cmd() == "info";
-    }
+	bool Command::is_info() const
+	{
+		return this->cmd() == "info";
+	}
 
-    bool Command::is_option() const
-    {
-        return this->cmd() == "option";
-    }
+	bool Command::is_option() const
+	{
+		return this->cmd() == "option";
+	}
 
 	bool Command::to_debug() const
 	{
@@ -315,7 +315,7 @@ namespace uci
 
 			regex_it = boost::sregex_token_iterator(line.begin(), line.end(), regex, { 1, 2, 3 });
 		}
-		
+
 		parse_helper(*this, line, regex_it);
 
 		// If parse moves 
@@ -454,7 +454,7 @@ namespace uci
 		string first;
 		string second;
 		iss >> first >> second;
-		
+
 		if (second == "pv" ||
 			second == "refutation" ||
 			second == "currline") {
@@ -471,10 +471,10 @@ namespace uci
 			if (this->isValid() && this->back().size()) {
 				string last = move(this->back());
 				this->pop_back();
-			
+
 				vector<string> tokens;
 				boost::split(tokens, last, boost::is_any_of(" "), boost::token_compress_on);
-			
+
 				move(tokens.begin(), tokens.end(), back_inserter(*this));
 			}
 		}
@@ -531,12 +531,22 @@ namespace uci
 
 		parse_helper(*this, line, regex_it);
 
-		if (this->size() == 6) {
+		if (this->size() >= 6) {
 			string last = std::move(this->back());
 			this->pop_back();
 
 			vector<string> temp;
-			boost::split(temp, last, boost::is_space());
+
+			if (this->at(4) == "string") {
+				regex = boost::regex(R"dil((default)\s+(.*))dil");
+
+				regex_it = boost::sregex_token_iterator(last.begin(), last.end(), regex, { 1, 2 });
+
+				parse_helper(temp, last, regex_it);
+			}
+			else {
+				boost::split(temp, last, boost::is_space());
+			}
 
 			for (string& str : temp) {
 				this->emplace_back(move(str));

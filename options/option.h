@@ -129,20 +129,20 @@ namespace uci
 			
 			friend std::ostream& operator<<(std::ostream& os, const string& op)
 			{
-				os << "type string";
+				os << "type string default";
 
 				if (op.default_val)
-					os << " default " << op.default_val.value();
+					os << " " << op.default_val.value();
 
-				// TODO: Not sure if this should exist
-				if (op.var)
-					os << " var " << op.var.value();
+				//// TODO: Not sure if this should exist
+				//if (op.var)
+				//	os << " var " << op.var.value();
 
 				return os;
 			}
 
 			std::optional<std::string> default_val;
-			std::optional<std::string> var;
+			//std::optional<std::string> var;
 		};
 
 		// ---------------------- OPTIONS (DERIVED TYPES) -------------------------
@@ -486,6 +486,8 @@ namespace uci
 				static_assert(std::is_base_of<options::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
 			}
 			
+			option(const Command& cmd);
+
 			option(option&&) noexcept = default;
 			virtual ~option() noexcept = default;
 			

@@ -9,6 +9,8 @@
 #include <boost/process/child.hpp>
 #include <boost/process/pipe.hpp>
 
+#include <boost/asio/streambuf.hpp>
+
 namespace uci
 {
 	// TODO: Why not simply call this 'Client' (no Uci)
@@ -63,21 +65,33 @@ namespace uci
 		const Command & recv_option();
 
 		//void handle(std::string & message);
-		//void on_id();
-		//void on_uciok();
-		//void on_readyok();
-		//void on_bestmove();
-		//void on_copyprotection();
-		//void on_register();
-		//void on_info();
-		//void on_option(); 
+		void on_any_command(const Command& cmd);
+		void on_id(const Command & cmd);
+		void on_uciok(const Command & cmd);
+		void on_readyok(const Command & cmd);
+		void on_bestmove(const Command & cmd);
+		void on_copyprotection(const Command & cmd);
+		void on_register(const Command & cmd);
+		void on_info(const Command & cmd);
+		void on_option(const Command & cmd); 
+
+		// ------------------ ASYNC -------------------------------------------
+
+		void init();
+
+		void update();
+
+		void terminate();
+
+		// ------------------ ACCESSORS ---------------------------------------
 
 	protected:
 		boost::process::child engine;
 	
 		boost::process::ipstream is;
 		boost::process::opstream os;
-		
+		boost::asio::streambuf sbuf;	// for holding input data
+
 		//std::function<void()> on_id_callback;
 		//std::function<void()> on_uciok_callback;
 		//std::function<void()> on_readyok_callback;
@@ -94,6 +108,6 @@ namespace uci
 		// list of options that the engine supports.
 		// This list comes from the option commands that the engine sends after 
 		// receiving 'uci'
-		//option_list options;
+		uci::options::list options;
 	};
 } // namespace uci

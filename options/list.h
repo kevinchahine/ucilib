@@ -6,9 +6,12 @@
 
 namespace uci
 {
-	//class option_list : public std::vector<option>
-	//{
-	//public:
-	//
-	//};
+	namespace options
+	{
+		class list : public std::vector<option>
+		{
+		public:
+
+		};
+	} // namespace options
 } // namespace uci

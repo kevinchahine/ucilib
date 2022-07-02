@@ -1,5 +1,4 @@
-#include "uci_base.h"
-#include "uci_client.h"
+#include "uci/uci_client.h"
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>	
@@ -210,5 +209,75 @@ namespace uci
 	}
 
 	// ----------------------------------- CALLBACKS -----------------------------
+	
+	void UciClient::on_any_command(const Command& cmd)
+	{
+		const string& cmd_name = cmd.cmd();
 
+		if (false) { /* placeholder */ }
+		else if (cmd_name == "id") { this->on_id(cmd); }
+		else if (cmd_name == "uciok") { this->on_uciok(cmd); }
+		else if (cmd_name == "readyok") { this->on_readyok(cmd); }
+		else if (cmd_name == "bestmove") { this->on_bestmove(cmd); }
+		else if (cmd_name == "copyprotection") { this->on_copyprotection(cmd); }
+		else if (cmd_name == "register") { this->on_register(cmd); }
+		else if (cmd_name == "info") { this->on_info(cmd); }
+		else if (cmd_name == "option") { this->on_option(cmd); }
+		else {
+			cout << "Error " << __FILE__ << " line " << __LINE__
+				<< ": command is not recognized " << cmd << endl;
+		}
+	}
+
+	void UciClient::on_id(const Command& cmd) {}
+	void UciClient::on_uciok(const Command& cmd) {}
+	void UciClient::on_readyok(const Command& cmd) {}
+	void UciClient::on_bestmove(const Command& cmd) {}
+	void UciClient::on_copyprotection(const Command& cmd) {}
+	void UciClient::on_register(const Command& cmd) {}
+	void UciClient::on_info(const Command& cmd) {}
+
+	void UciClient::on_option(const Command& cmd)
+	{
+		// TODO: Search options to see if this option has already been specified
+		// If so overwrite it.
+		options.emplace_back(cmd);
+	}
+
+	// ------------------ ASYNC -------------------------------------------
+
+	void UciClient::init()
+	{
+		//std::function<void(const boost::system::error_code&, std::size_t)> callback =
+		//	[&](const boost::system::error_code& ec, std::size_t size) {
+		//	cout << "It worked: " << size << ' ';
+		//
+		//	std::istream is(&sbuf);
+		//
+		//	string line;
+		//	getline(is, line);
+		//
+		//	cout << line << endl;
+		//
+		//	//boost::asio::async_read(ap_in, boost::asio::buffer(buf), callback);
+		//	boost::asio::async_read_until(is, sbuf, '\n', callback);
+		//
+		//	//cout << "Type UCI command to send to engine:";
+		//	//string line;
+		//	//getline(cin, line);
+		//	//
+		//	//pipe_out << line << endl;
+		//};
+		//
+		////boost::asio::async_read(ap_in, boost::asio::buffer(buf), callback);
+		//boost::asio::async_read_until(ap_in, sbuf, '\n', callback);
+		
+		// ------------------ DISPATCH CALLBACKS ------------------------------
+		//context.dispatch([this]() { this->on_any_command(); });
+	}
+
+	void UciClient::update()
+	{
+		context.poll();
+	}
 } // namespace uci

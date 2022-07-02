@@ -9,6 +9,7 @@
 #include <list>
 
 #include <boost/process/pipe.hpp>
+#include <boost/asio/io_context.hpp>
 
 namespace uci
 {
@@ -38,6 +39,14 @@ namespace uci
 		// 
 		static bool check_token_count(const std::vector<std::string> & tokens, size_t min_tokens);
 
+		// ------------------ ASYNC -------------------------------------------
+
+		void init();
+
+		void update();
+
+		void terminate();
+
 	protected:
 		// reads characters from `is` stream parses into a command and 
 		// pushes to `commands_in` list
@@ -47,6 +56,8 @@ namespace uci
 		void parse_line(std::istream& is);
 
 	protected:
+		boost::asio::io_context context;
+
 		//std::istream is;	// stream from remote process
 		//std::ostream os;	// stream to   remote process
 		//boost::process::ipstream is;
