@@ -147,13 +147,17 @@ else ()
 	set(Boost_USE_STATIC_RUNTIME	OFF)
 
 	find_package(Boost REQUIRED COMPONENTS
-		#algorithm
-		#asio 
+		#algorithm		# leave out header-only packages
+		#asio 			# leave out header-only packages
+		#process
 		system 
 		filesystem 
-		#process
 		regex
-		REQUIRED)
+		thread
+	)
+
+	include_directories(${Boost_INCLUDE_DIRS})
+	link_directories(${Boost_LIBRARY_DIRS})
 
 	target_link_libraries(${PROJECT_NAME} PUBLIC
 		#Boost::algorithm
@@ -161,12 +165,11 @@ else ()
 		Boost::system
 		Boost::filesystem
 		Boost::regex
+		${Boost_LIBRARIES}	# TODO: do we need this
 	)
 
 	message(STATUS "Include dirs ${Boost_INCLUDE_DIRS}")
 	message(STATUS "Boost libraries ${Boost_LIBRARIES}")
-
-	include_directories(${Boost_INCLUDE_DIRS})
 
 	target_include_directories(${PROJECT_NAME} PUBLIC
 		${Boost_INCLUDE_DIRS}
