@@ -92,20 +92,20 @@ namespace uci
 		{
 			os << "info";
 
-			if (i.depth) {
-				os << " depth " << i.depth.value();
+			if (i._depth) {
+				os << " depth " << i._depth.value();
 			}
-			if (i.seldepth) {
-				os << " seldepth " << i.seldepth.value();
+			if (i._seldepth) {
+				os << " seldepth " << i._seldepth.value();
 			}
-			if (i.time) {
-				os << " time " << i.time.value();
+			if (i._time) {
+				os << " time " << i._time.value();
 			}
-			if (i.nodes) {
-				os << " nodes " << i.nodes.value();
+			if (i._nodes) {
+				os << " nodes " << i._nodes.value();
 			}
-			if (i.pv) {
-				const std::vector<std::string>& pv = i.pv.value();
+			if (i._pv) {
+				const std::vector<std::string>& pv = i._pv.value();
 
 				if (pv.size()) {
 					os << " pv";
@@ -115,38 +115,38 @@ namespace uci
 					}
 				}
 			}
-			if (i.multipv) {
-				os << " multipv " << i.multipv.value();
+			if (i._multipv) {
+				os << " multipv " << i._multipv.value();
 			}
-			if (i.score) {
-				os << ' ' << i.score.value();
+			if (i._score) {
+				os << ' ' << i._score.value();
 			}
-			if (i.currmove) {
-				os << " currmove " << i.currmove.value();
+			if (i._currmove) {
+				os << " currmove " << i._currmove.value();
 			}
-			if (i.currmovenumber) {
-				os << " currmovenumber " << i.currmovenumber.value();
+			if (i._currmovenumber) {
+				os << " currmovenumber " << i._currmovenumber.value();
 			}
-			if (i.hashfull) {
-				os << " hashfull " << i.hashfull.value();
+			if (i._hashfull) {
+				os << " hashfull " << i._hashfull.value();
 			}
-			if (i.nps) {
-				os << " nps " << i.nps.value();
+			if (i._nps) {
+				os << " nps " << i._nps.value();
 			}
-			if (i.tbhits) {
-				os << " tbhits " << i.tbhits.value();
+			if (i._tbhits) {
+				os << " tbhits " << i._tbhits.value();
 			}
-			if (i.sbhits) {
-				os << " sbhits " << i.sbhits.value();
+			if (i._sbhits) {
+				os << " sbhits " << i._sbhits.value();
 			}
-			if (i.cpuload) {
-				os << " cpuload " << i.cpuload.value();
+			if (i._cpuload) {
+				os << " cpuload " << i._cpuload.value();
 			}
-			if (i.string_val) {
-				os << " string " << i.string_val.value();
+			if (i._string_val) {
+				os << " string " << i._string_val.value();
 			}
-			if (i.refutation) {
-				const std::vector<std::string>& ref = i.refutation.value();
+			if (i._refutation) {
+				const std::vector<std::string>& ref = i._refutation.value();
 
 				if (ref.size()) {
 					os << " refutation";
@@ -156,30 +156,30 @@ namespace uci
 					}
 				}
 			}
-			if (i.currline) {
-				os << ' ' << i.currline.value();
+			if (i._currline) {
+				os << ' ' << i._currline.value();
 			}
 
 			return os;
 		}
 
 	public:
-		std::optional<int> depth;
-		std::optional<int> seldepth;
-		std::optional<int> time;
-		std::optional<int> nodes;
-		std::optional<std::vector<std::string>> pv;
-		std::optional<int> multipv;
-		std::optional<score> score;
-		std::optional<std::string> currmove;
-		std::optional<int> currmovenumber;
-		std::optional<int> hashfull;
-		std::optional<int> nps;
-		std::optional<int> tbhits;
-		std::optional<int> sbhits;
-		std::optional<int> cpuload;
-		std::optional<std::string> string_val;
-		std::optional<std::vector<std::string>> refutation;
-		std::optional<currline> currline;
+		std::optional<int> _depth;
+		std::optional<int> _seldepth;
+		std::optional<int> _time;
+		std::optional<int> _nodes;
+		std::optional<std::vector<std::string>> _pv;
+		std::optional<int> _multipv;
+		std::optional<score> _score;
+		std::optional<std::string> _currmove;
+		std::optional<int> _currmovenumber;
+		std::optional<int> _hashfull;
+		std::optional<int> _nps;
+		std::optional<int> _tbhits;
+		std::optional<int> _sbhits;
+		std::optional<int> _cpuload;
+		std::optional<std::string> _string_val;
+		std::optional<std::vector<std::string>> _refutation;
+		std::optional<currline> _currline;
 	};
 } // namespace uci

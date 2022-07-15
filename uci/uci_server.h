@@ -101,6 +101,6 @@ namespace uci
 	template<class OPTION_T>
 	void UciServer::send_option(const OPTION_T& op)
 	{
-		os << op << endl;
+		os << op << std::endl;
 	}
 } // namespace uci

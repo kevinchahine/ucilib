@@ -350,7 +350,7 @@ namespace uci
 
 		vector<string> vec;
 
-		boost::split(vec, line, isspace);
+		//boost::algorithm::split(vec, line, boost::algorithm::is_space);
 
 		// TODO: Finish this
 	}

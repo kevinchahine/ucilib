@@ -137,7 +137,7 @@ if (MSVC)
 	message(STATUS "\nVCPKG packages will be automatically linked to visual studio\n")
 else ()
 	# --- For VCPKG packages ---
-	message(STATUS "call cmake with: cmake .. -DCMAKE_TOOLCHAIN_FILE=/__path__/__to__/vcpkg/scripts/buildsystems/vcpkg.cmake")
+	message(STATUS "\nCall cmake with: cmake .. -DCMAKE_TOOLCHAIN_FILE=/__path__/__to__/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 	# ----- BOOST -----
 
@@ -147,7 +147,7 @@ else ()
 	set(Boost_USE_STATIC_RUNTIME	OFF)
 
 	find_package(Boost REQUIRED COMPONENTS
-		algorithm
+		#algorithm
 		#asio 
 		system 
 		filesystem 
@@ -156,7 +156,7 @@ else ()
 		REQUIRED)
 
 	target_link_libraries(${PROJECT_NAME} PUBLIC
-		Boost::algorithm
+		#Boost::algorithm
 		#Boost::asio
 		Boost::system
 		Boost::filesystem
@@ -166,9 +166,9 @@ else ()
 	message(STATUS "Include dirs ${Boost_INCLUDE_DIRS}")
 	message(STATUS "Boost libraries ${Boost_LIBRARIES}")
 
-	include_directories(${BOOST_INCLUDE_DIRS})
+	include_directories(${Boost_INCLUDE_DIRS})
 
 	target_include_directories(${PROJECT_NAME} PUBLIC
-		${BOOST_INCLUDE_DIRS}
+		${Boost_INCLUDE_DIRS}
 	)
 endif (MSVC)
