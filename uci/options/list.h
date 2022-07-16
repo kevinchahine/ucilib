@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uci/options/option.h"
+#include "../options/option.h"
 
 #include <vector>
 

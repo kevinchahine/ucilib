@@ -1,4 +1,4 @@
-#include "uci/uci_client.h"
+#include "uci_client.h"
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>	

@@ -22,13 +22,11 @@ set(NOTES
 )
 
 set(OPTIONS
-	"options/option.cpp"
-	"options/option.h"
-	"options/list.cpp"
-	"options/list.h"
-	"options/factory.cpp"
-	"options/factory.h"
-	"options/setoption.h"
+	"uci/options/option.cpp"
+	"uci/options/option.h"
+	"uci/options/list.cpp"
+	"uci/options/list.h"
+	"uci/options/setoption.h"
 )
 
 set(UCI
@@ -137,7 +135,7 @@ if (MSVC)
 	message(STATUS "\nVCPKG packages will be automatically linked to visual studio\n")
 else ()
 	# --- For VCPKG packages ---
-	message(STATUS "\nCall cmake with: cmake .. -DCMAKE_TOOLCHAIN_FILE=/__path__/__to__/vcpkg/scripts/buildsystems/vcpkg.cmake")
+	#message(STATUS "\nCall cmake with: cmake .. -DCMAKE_TOOLCHAIN_FILE=/__path__/__to__/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 	# ----- BOOST -----
 
@@ -149,7 +147,7 @@ else ()
 	find_package(Boost REQUIRED COMPONENTS
 		#algorithm		# leave out header-only packages
 		#asio 			# leave out header-only packages
-		#process
+		#process		# leave out header-only packages
 		system 
 		filesystem 
 		regex
@@ -160,8 +158,8 @@ else ()
 	link_directories(${Boost_LIBRARY_DIRS})
 
 	target_link_libraries(${PROJECT_NAME} PUBLIC
-		#Boost::algorithm
-		#Boost::asio
+		#Boost::algorithm	# leave out header-only packages
+		#Boost::asio		# leave out header-only packages
 		Boost::system
 		Boost::filesystem
 		Boost::regex

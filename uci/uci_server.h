@@ -2,9 +2,9 @@
 
 #include "uci_base.h"
 
-#include "uci/info.h"
-#include "uci/options/option.h"
-#include "uci/options/list.h"
+#include "info.h"
+#include "options/option.h"
+#include "options/list.h"
 
 namespace uci
 {

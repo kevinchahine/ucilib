@@ -1,6 +1,6 @@
-#include "uci/options/option.h"
+#include "../options/option.h"
 
-#include "uci/commands/command.h"
+#include "../commands/command.h"
 
 using namespace std;
 

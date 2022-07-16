@@ -1,9 +1,9 @@
 #pragma once
 
-#include "uci/go.h"
-#include "uci/info.h"
-#include "uci/options/option.h"
-#include "uci/options/setoption.h"
+#include "../go.h"
+#include "../info.h"
+#include "../options/option.h"
+#include "../options/setoption.h"
 
 #include <iostream>
 #include <string>
