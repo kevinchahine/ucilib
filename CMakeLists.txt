@@ -121,6 +121,8 @@ target_compile_features(${LIBRARY_NAME} PRIVATE cxx_std_17)
 
 include_directories(${LIBRARY_NAME}	".")
 
+target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 source_group(commands FILES ${COMMANDS})
 source_group(notes FILES ${NOTES})
 source_group("options" FILES ${OPTIONS})

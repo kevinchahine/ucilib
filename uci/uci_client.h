@@ -54,15 +54,15 @@ namespace uci
 		// Received command must be valid. Method will continue to block until a valid command is received
 		// and matches `cmd_to_wait_for`.
 		// Blocking call. 
-		const Command & recv(const std::string& cmd_to_wait_for);
-		const Command & recv_id();
-		const Command & recv_uciok();
-		const Command & recv_readyok();
-		const Command & recv_bestmove();
-		const Command & recv_copyprotection();
-		const Command & recv_registration();
-		const Command & recv_info();
-		const Command & recv_option();
+		const Command & recv_until(const std::string& cmd_to_wait_for);
+		const Command & recv_until_id();
+		const Command & recv_until_uciok();
+		const Command & recv_until_readyok();
+		const Command & recv_until_bestmove();
+		const Command & recv_until_copyprotection();
+		const Command & recv_until_registration();
+		const Command & recv_until_info();
+		const Command & recv_until_option();
 
 		//void handle(std::string & message);
 		void on_any_command(const Command& cmd);
@@ -85,6 +85,10 @@ namespace uci
 
 		// ------------------ ACCESSORS ---------------------------------------
 
+		const std::string engine_name() const { return name; }
+		const std::string engine_author() const { return author; }
+		const std::string best_move() const { return bestmove; }
+		
 	protected:
 		boost::process::child engine;
 	

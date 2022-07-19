@@ -147,7 +147,7 @@ namespace uci
 
 	// ----------------------------------- WAITS ---------------------------------
 
-	const Command & UciClient::recv(const std::string& cmd_to_wait_for)
+	const Command & UciClient::recv_until(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
 			// Reads next currline from input stream. 
@@ -168,44 +168,44 @@ namespace uci
 		return commands_in.back();
 	}
 
-	const Command & UciClient::recv_id() 
+	const Command & UciClient::recv_until_id() 
 	{
-		return recv("id");
+		return recv_until("id");
 	}
 
-	const Command & UciClient::recv_uciok() 
+	const Command & UciClient::recv_until_uciok() 
 	{
-		return recv("uciok");
+		return recv_until("uciok");
 	}
 
-	const Command & UciClient::recv_readyok()
+	const Command & UciClient::recv_until_readyok()
 	{
-		return recv("readyok");
+		return recv_until("readyok");
 	}
 
-	const Command & UciClient::recv_bestmove()
+	const Command & UciClient::recv_until_bestmove()
 	{
-		return recv("bestmove");
+		return recv_until("bestmove");
 	}
 
-	const Command & UciClient::recv_copyprotection() 
+	const Command & UciClient::recv_until_copyprotection() 
 	{
-		return recv("copyprotection");
+		return recv_until("copyprotection");
 	}
 
-	const Command & UciClient::recv_registration() 
+	const Command & UciClient::recv_until_registration() 
 	{
-		return recv("registration");
+		return recv_until("registration");
 	}
 
-	const Command & UciClient::recv_info() 
+	const Command & UciClient::recv_until_info() 
 	{
-		return recv("info");
+		return recv_until("info");
 	}
 
-	const Command & UciClient::recv_option()
+	const Command & UciClient::recv_until_option()
 	{
-		return recv("option");
+		return recv_until("option");
 	}
 
 	// ----------------------------------- CALLBACKS -----------------------------
