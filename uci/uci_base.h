@@ -1,5 +1,9 @@
 #pragma once
 
+#include <boost/process/pipe.hpp>
+//#include <boost/asio/io_service.hpp>
+#include <boost/asio/io_context.hpp>
+
 #include "commands/command.h"
 
 #include <functional>
@@ -7,9 +11,6 @@
 #include <string>
 #include <vector>
 #include <list>
-
-#include <boost/process/pipe.hpp>
-#include <boost/asio/io_context.hpp>
 
 namespace uci
 {
@@ -56,6 +57,7 @@ namespace uci
 		void parse_line(std::istream& is);
 
 	protected:
+		//boost::asio::io_service context;	// TODO: Rename this 'ios' or 'service'
 		boost::asio::io_context context;
 
 		//std::istream is;	// stream from remote process

@@ -64,6 +64,13 @@ namespace uci
 		//}
 		//
 		//cout << "done" << endl;
+
+		boost::filesystem::path filename = path.filename();
+		if (filename.has_extension()) {
+			filename = filename.leaf();
+		}
+
+		name = filename.string();	// TODO: strip filename extension if it exists
 	}
 
 	void UciClient::close()
@@ -107,12 +114,22 @@ namespace uci
 
 	void UciClient::send_position(const string fen)
 	{
-		os << "position " << fen << endl;
+		if (fen == "startpos" || fen.empty()) {
+			os << "position startpos" << endl;
+		}
+		else {
+			os << "position fen " << fen << endl;
+		}
 	}
 
 	void UciClient::send_position(const std::string fen, const std::vector<std::string>& moveSequence)
 	{
-		os << "position " << fen;
+		if (fen == "startpos") {
+			os << "position startpos";
+		}
+		else {
+			os << "position fen " << fen;
+		}
 
 		if (moveSequence.size()) {
 			os << " moves";

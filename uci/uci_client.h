@@ -39,11 +39,10 @@ namespace uci
 		//void send_setoption(const Option& op);
 		//void send_register(...);
 		void send_ucinewgame();
-		//template<typename CONTAINER_T>
-		//void send_position(const std::string fen, const CONTAINER_T& moves_begin, const CONTAINER_T& moves_end);
 		void send_position();
 		// fen - fen representation of position (can be 'startpos')
 		void send_position(const std::string fen);
+		// fen - fen representation of position (can be 'startpos')
 		void send_position(const std::string fen, const std::vector<std::string>& moveSequence);
 		void send_go(const go & go_params);
 		void send_stop();
