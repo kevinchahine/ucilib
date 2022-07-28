@@ -17,7 +17,7 @@ namespace uci
 	class UciClient : public UciBase
 	{
 	public:
-		UciClient(const std::string& engineFilePath);
+		UciClient(const boost::filesystem::path& engine_file_path);
 
 		UciClient() = default;
 		UciClient(const UciClient&) = default;
@@ -26,7 +26,7 @@ namespace uci
 		UciClient& operator=(const UciClient&) = default;
 		UciClient& operator=(UciClient&&) noexcept = default;
 
-		void launch(const std::string & engine_file_path);
+		void launch(const boost::filesystem::path& engine_file_path);
 
 		void close();
 

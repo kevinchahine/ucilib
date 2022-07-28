@@ -168,6 +168,7 @@ else ()
 	target_link_libraries(${PROJECT_NAME} PUBLIC
 		#Boost::algorithm	# leave out header-only packages
 		#Boost::asio		# leave out header-only packages
+		#Boost::process		# leave out header-only packages
 		Boost::system
 		Boost::filesystem
 		Boost::regex
@@ -181,3 +182,9 @@ else ()
 		${Boost_INCLUDE_DIRS}
 	)
 endif (MSVC)
+
+# --- Guten ---
+message(STATUS "\n----- ForgeLib -----\n")
+
+target_link_libraries(${LIBRARY_NAME} PUBLIC forgelib)
+

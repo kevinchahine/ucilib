@@ -11,15 +11,15 @@ using namespace std;
 
 namespace uci
 {
-	UciClient::UciClient(const std::string& engineFilePath)
+	UciClient::UciClient(const boost::filesystem::path& engine_file_path)
 	{
-		launch(engineFilePath);
+		launch(engine_file_path);
 	}
 
-	void UciClient::launch(const std::string& engine_file_path)
+	void UciClient::launch(const boost::filesystem::path& engine_file_path)
 	{
 		// --- 1.) Make sure engine application exists ---
-		boost::filesystem::path path = engine_file_path;
+		const boost::filesystem::path & path = engine_file_path;
 		cout << "Engine path: " << path << endl;
 
 		if (path.is_absolute()) {
