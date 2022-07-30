@@ -20,18 +20,18 @@ namespace uci
 	{
 		// --- 1.) Make sure engine application exists ---
 		const boost::filesystem::path & path = engine_file_path;
-		cout << "Engine path: " << path << endl;
+		//cout << "Engine path: " << path << endl;
 
 		if (path.is_absolute()) {
-			cout << "Path is absolute" << endl;
+			//cout << "Path is absolute" << endl;
 		}
 		else {
-			cout << "Path is relative" << endl;
+			//cout << "Path is relative" << endl;
 			// app can be in:
 			//	- current currectory
 			//	- under system path
 			if (boost::filesystem::exists(path)) {
-				cout << "app exists" << endl;
+				//cout << "app exists" << endl;
 			}
 			else {
 				// Check under system path
