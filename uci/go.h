@@ -5,11 +5,17 @@
 #include <list>
 #include <optional>
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 namespace uci
 {
 	class go
 	{
 	public:
+
+		boost::property_tree::ptree serialize() const;
+
+		void parse(const boost::property_tree::ptree& tree);
 
 		friend std::ostream& operator<<(std::ostream& os, const go& go)
 		{
@@ -34,7 +40,7 @@ namespace uci
 			if (go.nodes)			os << " nodes " << go.nodes.value();
 			if (go.mate)			os << " mate " << go.mate.value();
 			if (go.movetime)		os << " movetime " << go.movetime.value();
-			if (go.infinite)		os << " infinite " << go.infinite.value();
+			if (go.infinite)		os << " infinite";	// don't print value
 
 			return os;
 		}
@@ -51,6 +57,6 @@ namespace uci
 		std::optional<int> nodes;
 		std::optional<int> mate;
 		std::optional<int> movetime;
-		std::optional<void*> infinite;
+		std::optional<bool> infinite;	// Value is irrelevant. call infinite.has_value() to determine if infinite has been set.
 	};
 } // namespace uci
