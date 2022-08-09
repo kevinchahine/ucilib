@@ -58,12 +58,19 @@ namespace uci
 
 	// -------------------------------- RECEIVE -------------------------------
 
-	const Command& UciServer::recv(const std::string& cmd_to_wait_for)
+	const Command& UciServer::recv()
+	{
+		this->parse_line(is);
+
+		return commands_in.back();
+	}
+
+	const Command& UciServer::recv_until(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
 			// Reads next currline from input stream. 
-			// Blocking call. Blocks until entire currline is read.
-			// If currline is a valid command, it will be appended to back of `commands_in`
+			// Blocking call. Blocks until entire line is read.
+			// If line is a valid command, it will be appended to back of `commands_in`
 			// Invalid commands will be deleted and method will return
 			this->parse_line(is);
 
@@ -79,59 +86,59 @@ namespace uci
 		return commands_in.back();
 	}
 
-	const Command& UciServer::recv_uci()
+	const Command& UciServer::recv_until_uci()
 	{
-		return recv("uci");
+		return recv_until("uci");
 	}
 
-	const Command& UciServer::recv_debug()
+	const Command& UciServer::recv_until_debug()
 	{
-		return recv("debug");
+		return recv_until("debug");
 	}
 
-	const Command& UciServer::recv_isready()
+	const Command& UciServer::recv_until_isready()
 	{
-		return recv("isready");
+		return recv_until("isready");
 	}
 
-	const Command& UciServer::recv_setoption()
+	const Command& UciServer::recv_until_setoption()
 	{
-		return recv("setoption");
+		return recv_until("setoption");
 	}
 
-	const Command& UciServer::recv_register()
+	const Command& UciServer::recv_until_register()
 	{
-		return recv("register");
+		return recv_until("register");
 	}
 
-	const Command& UciServer::recv_ucinewgame()
+	const Command& UciServer::recv_until_ucinewgame()
 	{
-		return recv("ucinewgame");
+		return recv_until("ucinewgame");
 	}
 
-	const Command& UciServer::recv_position()
+	const Command& UciServer::recv_until_position()
 	{
-		return recv("position");
+		return recv_until("position");
 	}
 
-	const Command& UciServer::recv_go()
+	const Command& UciServer::recv_until_go()
 	{
-		return recv("go");
+		return recv_until("go");
 	}
 
-	const Command& UciServer::recv_stop()
+	const Command& UciServer::recv_until_stop()
 	{
-		return recv("stop");
+		return recv_until("stop");
 	}
 
-	const Command& UciServer::recv_ponderhit()
+	const Command& UciServer::recv_until_ponderhit()
 	{
-		return recv("ponderhit");
+		return recv_until("ponderhit");
 	}
 
-	const Command& UciServer::recv_quit()
+	const Command& UciServer::recv_until_quit()
 	{
-		return recv("quit");
+		return recv_until("quit");
 	}
 
 	// -------------------------------- CALLBACKS -----------------------------

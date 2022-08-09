@@ -49,22 +49,27 @@ namespace uci
 
 		// ---------------------------- RECEIVE -------------------------------
 		
-		// Waits until a specific command is received from client (engine) before returning.
+		// Waits until the next command is received from server (gui) before returning.
+		// Returns command. Command may be valid or invalid. Check using a call to Command::isValid()
+		// Method will block until the next command is received.
+		const Command & recv();
+
+		// Waits until a specific command is received from server (gui) before returning.
 		// Received command must be valid. Method will continue to block until a valid command is received
 		// and matches `cmd_to_wait_for`.
 		// Blocking call. 
-		const Command & recv(const std::string& cmd_to_wait_for);
-		const Command & recv_uci();
-		const Command & recv_debug();
-		const Command & recv_isready();
-		const Command & recv_setoption();
-		const Command & recv_register();
-		const Command & recv_ucinewgame();
-		const Command & recv_position();
-		const Command & recv_go();
-		const Command & recv_stop();
-		const Command & recv_ponderhit();
-		const Command & recv_quit();
+		const Command & recv_until(const std::string& cmd_to_wait_for);
+		const Command & recv_until_uci();
+		const Command & recv_until_debug();
+		const Command & recv_until_isready();
+		const Command & recv_until_setoption();
+		const Command & recv_until_register();
+		const Command & recv_until_ucinewgame();
+		const Command & recv_until_position();
+		const Command & recv_until_go();
+		const Command & recv_until_stop();
+		const Command & recv_until_ponderhit();
+		const Command & recv_until_quit();
 
 	protected:
 

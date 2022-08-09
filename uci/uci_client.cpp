@@ -162,7 +162,7 @@ namespace uci
 		os << "quit" << endl;
 	}
 
-	// ----------------------------------- WAITS ---------------------------------
+	// ----------------------------------- RECV UNTILS ------------------------
 
 	const Command & UciClient::recv_until(const std::string& cmd_to_wait_for)
 	{
