@@ -71,7 +71,6 @@ if (MSVC)
 
 	add_compile_definitions(_WIN32_WINNT=0x0601)	# same as '#define _WIN32_WINNT'
 	add_compile_definitions(WIN32_LEAN_AND_MEAN)
-
 else ()
 	# --- For VCPKG packages ---
 	#message(STATUS "\nCall cmake with: cmake .. -DCMAKE_TOOLCHAIN_FILE=/__path__/__to__/vcpkg/scripts/buildsystems/vcpkg.cmake")

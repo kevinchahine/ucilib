@@ -74,14 +74,6 @@ namespace uci
 		void on_info(const Command & cmd);
 		void on_option(const Command & cmd); 
 
-		// ------------------ ASYNC -------------------------------------------
-
-		void init();
-
-		void update();
-
-		void terminate();
-
 		// ------------------ ACCESSORS ---------------------------------------
 
 		const std::string engine_name() const { return name; }

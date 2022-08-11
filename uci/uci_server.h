@@ -6,6 +6,8 @@
 #include "options/option.h"
 #include "options/list.h"
 
+#include <thread>
+
 namespace uci
 {
 	// See class UciBase
@@ -45,7 +47,7 @@ namespace uci
 		//void send_copyprotection(CopyProtection copyProtection);
 		//void send_register(Registration registration);
 		void send_info(info info);
-		template<class OPTION_T> void send_option(const OPTION_T & op);
+		template<class OPTION_T> void send_option(const OPTION_T& op) { os << op << std::endl; }
 
 		// ---------------------------- RECEIVE -------------------------------
 		
@@ -73,9 +75,6 @@ namespace uci
 
 	protected:
 
-		// Handles all incomming messages
-		//void handle(const std::string& message);
-
 		// Callbacks
 		void on_uci(const Command & cmd);
 		void on_debug(const Command & cmd);
@@ -90,22 +89,11 @@ namespace uci
 		void on_quit(const Command & cmd);
 
 	protected:
-
-		std::function<void()> uci_callback;
-
 		std::ostream & os;
 		std::istream & is;
 
-		bool is_quit_received = false;
-
 		// List of all options which the server (GUI) has set
 		// through 'setoption' commands
-		//option_list option_settings;
+		options::list option_settings;
 	};
-	
-	template<class OPTION_T>
-	void UciServer::send_option(const OPTION_T& op)
-	{
-		os << op << std::endl;
-	}
 } // namespace uci

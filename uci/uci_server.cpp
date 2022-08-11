@@ -146,10 +146,11 @@ namespace uci
     void UciServer::on_setoption(const Command& cmd)
     {
 		// --- 1.) Generate an option object from command ---
-		//option op;
+		options::option op;
+		op.from(cmd);
 
 		// --- 2.) Push option object to list ---
-		//option_settings.push_back(op);
+		option_settings.push_back(std::move(op));
     }
 
 } // namespace uci

@@ -260,41 +260,4 @@ namespace uci
 		// If so overwrite it.
 		options.emplace_back(cmd);
 	}
-
-	// ------------------ ASYNC -------------------------------------------
-
-	void UciClient::init()
-	{
-		//std::function<void(const boost::system::error_code&, std::size_t)> callback =
-		//	[&](const boost::system::error_code& ec, std::size_t size) {
-		//	cout << "It worked: " << size << ' ';
-		//
-		//	std::istream is(&sbuf);
-		//
-		//	string line;
-		//	getline(is, line);
-		//
-		//	cout << line << endl;
-		//
-		//	//boost::asio::async_read(ap_in, boost::asio::buffer(buf), callback);
-		//	boost::asio::async_read_until(is, sbuf, '\n', callback);
-		//
-		//	//cout << "Type UCI command to send to engine:";
-		//	//string line;
-		//	//getline(cin, line);
-		//	//
-		//	//pipe_out << line << endl;
-		//};
-		//
-		////boost::asio::async_read(ap_in, boost::asio::buffer(buf), callback);
-		//boost::asio::async_read_until(ap_in, sbuf, '\n', callback);
-		
-		// ------------------ DISPATCH CALLBACKS ------------------------------
-		//context.dispatch([this]() { this->on_any_command(); });
-	}
-
-	void UciClient::update()
-	{
-		context.poll();
-	}
 } // namespace uci

@@ -491,7 +491,7 @@ namespace uci
 			option(option&&) noexcept = default;
 			virtual ~option() noexcept = default;
 			
-			//option& operator=(const option&) = default;
+			option& operator=(const option&) = default;
 			
 			option& operator=(option&&) noexcept = default;
 		
@@ -523,7 +523,8 @@ namespace uci
 				return dynamic_cast<const OPTION_T*>(ptr.get()) != nullptr;
 			}
 
-			void fill_from(const Command& cmd);
+			void from(const Command& cmd) { fill_from(cmd); }	// TODO: Make this the only from() method
+			void fill_from(const Command& cmd);					// TODO: Remove this method
 
 			std::string to_string() const
 			{

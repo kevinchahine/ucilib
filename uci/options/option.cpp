@@ -109,7 +109,7 @@ namespace uci
 			}
 
 			if (cmd.size() < 5) {
-				cout << "error: " << cmd << " must be atleast 5 tokens long" << endl;
+				cout << "error: " << cmd << " must be atleast 5 tokens long to be an option" << endl;
 				return;
 			}
 
@@ -146,6 +146,9 @@ namespace uci
 				cout << "Unknown option " << op_name << endl;
 				return;
 			}
+
+			// *** The previous conditionals have set *this to a type of option cooresponding to the command ***
+			// *** Now *this can parse the command and extract its data as it needs ***
 
 			this->ptr->fill_from(cmd);
 		}
