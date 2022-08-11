@@ -1,10 +1,10 @@
-#include "uci_base.h"
+#include "base.h"
 
 using namespace std;
 
 namespace uci
 {
-	void UciBase::parse_line(istream & is)
+	void base::parse_line(istream & is)
 	{
 		// --- get currline from stream (blocking) ---
 		std::string line;
@@ -25,13 +25,13 @@ namespace uci
 		}
 	}
 
-	void UciBase::init()
+	void base::init()
 	{
 		// ------------------ DISPATCH CALLBACKS ------------------------------
 
 	}
 
-	void UciBase::update()
+	void base::update()
 	{
 		context.poll();
 	}

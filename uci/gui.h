@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uci_base.h"
+#include "base.h"
 
 #include "info.h"
 #include "options/option.h"
@@ -10,29 +10,29 @@
 
 namespace uci
 {
-	// See class UciBase
+	// See class base
 	// 
-	// Represents the UciServer which is running this process. 
+	// Represents the gui which is running this process. 
 	// A UCI Server is a UCI compatible Chess GUI.
 	// An object of this class can be used to communicate with 
 	// a UCI Server using the UCI protocol.
 	// 
 	// A chess engine which is spawned from a UCI Server (Chess GUI) 
-	// should instantiate a UciServer object and connect 
-	// std_in and std_out to the UciServer object using its constructor.
+	// should instantiate a gui object and connect 
+	// std_in and std_out to the gui object using its constructor.
 	// 
 	// Because the UCI Client (Chess Engine) needs to always be responsive
 	// to commands received from the UCI Server (Chess GUI), the 
-	// UciServer object internally spawns a separate thread.
+	// gui object internally spawns a separate thread.
 	// This thread will need access to parts of the engine like
 	// search parameters and engine information.
 	// 
 	// Streams:
 	//	use std::cin and std::cout when communicating with UCI Server (UCI GUI)
-	class UciServer : public UciBase
+	class gui : public base
 	{
 	public:
-		UciServer() :
+		gui() :
 			os(std::cout),
 			is(std::cin) {}
 

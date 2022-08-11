@@ -1,4 +1,4 @@
-#include "uci_client.h"
+#include "engine.h"
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>	
@@ -11,12 +11,12 @@ using namespace std;
 
 namespace uci
 {
-	UciClient::UciClient(const boost::filesystem::path& engine_file_path)
+	engine::engine(const boost::filesystem::path& engine_file_path)
 	{
 		launch(engine_file_path);
 	}
 
-	void UciClient::launch(const boost::filesystem::path& engine_file_path)
+	void engine::launch(const boost::filesystem::path& engine_file_path)
 	{
 		// --- 1.) Make sure engine application exists ---
 		const boost::filesystem::path & path = engine_file_path;
@@ -51,7 +51,7 @@ namespace uci
 		}
 
 		// --- 2.) Open engine ---
-		engine = boost::process::child{
+		engine_process = boost::process::child{
 			engine_file_path,
 			boost::process::std_out > is,
 			boost::process::std_in < os
@@ -73,18 +73,18 @@ namespace uci
 		name = filename.string();	// TODO: strip filename extension if it exists
 	}
 
-	void UciClient::close()
+	void engine::close()
 	{
 		// TODO: This might hang
 		//engine.wait();
 	}
 
-	void UciClient::send_uci()
+	void engine::send_uci()
 	{
 		os << "uci" << endl;
 	}
 
-	void UciClient::send_debug(const Debug& debug)
+	void engine::send_debug(const Debug& debug)
 	{
 		os << "debug ";
 
@@ -97,22 +97,22 @@ namespace uci
 		os << endl;
 	}
 
-	void UciClient::send_isready()
+	void engine::send_isready()
 	{
 		os << "isready" << endl;
 	}
 
-	void UciClient::send_ucinewgame()
+	void engine::send_ucinewgame()
 	{
 		os << "ucinewgame" << endl;
 	}
 
-	void UciClient::send_position()
+	void engine::send_position()
 	{
 		os << "position startpos" << endl;
 	}
 
-	void UciClient::send_position(const string fen)
+	void engine::send_position(const string fen)
 	{
 		if (fen == "startpos" || fen.empty()) {
 			os << "position startpos" << endl;
@@ -122,7 +122,7 @@ namespace uci
 		}
 	}
 
-	void UciClient::send_position(const std::string fen, const std::vector<std::string>& moveSequence)
+	void engine::send_position(const std::string fen, const std::vector<std::string>& moveSequence)
 	{
 		if (fen == "startpos") {
 			os << "position startpos";
@@ -142,29 +142,29 @@ namespace uci
 		os << endl;
 	}
 
-	void UciClient::send_go(const go& go_params)
+	void engine::send_go(const go& go_params)
 	{
 		os << go_params << endl;
 	}
 
-	void UciClient::send_stop()
+	void engine::send_stop()
 	{
 		os << "stop" << endl;
 	}
 
-	void UciClient::send_ponderhit()
+	void engine::send_ponderhit()
 	{
 		os << "ponderhit" << endl;
 	}
 
-	void UciClient::send_quit()
+	void engine::send_quit()
 	{
 		os << "quit" << endl;
 	}
 
 	// ----------------------------------- RECV UNTILS ------------------------
 
-	const Command & UciClient::recv_until(const std::string& cmd_to_wait_for)
+	const Command & engine::recv_until(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
 			// Reads next currline from input stream. 
@@ -185,49 +185,49 @@ namespace uci
 		return commands_in.back();
 	}
 
-	const Command & UciClient::recv_until_id() 
+	const Command & engine::recv_until_id() 
 	{
 		return recv_until("id");
 	}
 
-	const Command & UciClient::recv_until_uciok() 
+	const Command & engine::recv_until_uciok() 
 	{
 		return recv_until("uciok");
 	}
 
-	const Command & UciClient::recv_until_readyok()
+	const Command & engine::recv_until_readyok()
 	{
 		return recv_until("readyok");
 	}
 
-	const Command & UciClient::recv_until_bestmove()
+	const Command & engine::recv_until_bestmove()
 	{
 		return recv_until("bestmove");
 	}
 
-	const Command & UciClient::recv_until_copyprotection() 
+	const Command & engine::recv_until_copyprotection() 
 	{
 		return recv_until("copyprotection");
 	}
 
-	const Command & UciClient::recv_until_registration() 
+	const Command & engine::recv_until_registration() 
 	{
 		return recv_until("registration");
 	}
 
-	const Command & UciClient::recv_until_info() 
+	const Command & engine::recv_until_info() 
 	{
 		return recv_until("info");
 	}
 
-	const Command & UciClient::recv_until_option()
+	const Command & engine::recv_until_option()
 	{
 		return recv_until("option");
 	}
 
 	// ----------------------------------- CALLBACKS -----------------------------
 	
-	void UciClient::on_any_command(const Command& cmd)
+	void engine::on_any_command(const Command& cmd)
 	{
 		const string& cmd_name = cmd.cmd();
 
@@ -246,15 +246,15 @@ namespace uci
 		}
 	}
 
-	void UciClient::on_id(const Command& cmd) {}
-	void UciClient::on_uciok(const Command& cmd) {}
-	void UciClient::on_readyok(const Command& cmd) {}
-	void UciClient::on_bestmove(const Command& cmd) {}
-	void UciClient::on_copyprotection(const Command& cmd) {}
-	void UciClient::on_register(const Command& cmd) {}
-	void UciClient::on_info(const Command& cmd) {}
+	void engine::on_id(const Command& cmd) {}
+	void engine::on_uciok(const Command& cmd) {}
+	void engine::on_readyok(const Command& cmd) {}
+	void engine::on_bestmove(const Command& cmd) {}
+	void engine::on_copyprotection(const Command& cmd) {}
+	void engine::on_register(const Command& cmd) {}
+	void engine::on_info(const Command& cmd) {}
 
-	void UciClient::on_option(const Command& cmd)
+	void engine::on_option(const Command& cmd)
 	{
 		// TODO: Search options to see if this option has already been specified
 		// If so overwrite it.

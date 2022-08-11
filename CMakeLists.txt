@@ -39,12 +39,12 @@ set(UCI
 	uci/info.cpp
 	uci/info.h
 	uci/uci.hpp
-	uci/uci_base.cpp
-	uci/uci_base.h
-	uci/uci_client.cpp
-	uci/uci_client.h
-	uci/uci_server.cpp
-	uci/uci_server.h
+	uci/base.cpp
+	uci/base.h
+	uci/engine.cpp
+	uci/engine.h
+	uci/gui.cpp
+	uci/gui.h
 )
 
 add_library(${LIBRARY_NAME} STATIC 

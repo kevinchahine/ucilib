@@ -14,28 +14,28 @@
 
 namespace uci
 {
-	// Base class of both UciServer and UciClient.
-	// UciServer - represents a UCI compatible Chess GUI
-	// UciClient - represents a UCI compatible Chess Engine
+	// Base class of both gui and engine.
+	// gui - represents a UCI compatible Chess GUI
+	// engine - represents a UCI compatible Chess Engine
 	// Data is transmitted through streams (istream and ostream)
 	// 
 	// send methods are always non-blocking and can be called at
 	// anytime. They should be called in a way that conforms with 
 	// the UCI protocol. 
 	//
-	// Handle methods should only be called internally by the UciBase,
-	// UciClient and UciServer objects. Handle methods are called
+	// Handle methods should only be called internally by the base,
+	// engine and gui objects. Handle methods are called
 	// asynchronously on a separate thread. These methods will 
 	// 
-	class UciBase
+	class base
 	{
 	public:
-		UciBase() = default;
-		UciBase(const UciBase&) = default;
-		UciBase(UciBase&&) noexcept = default;
-		~UciBase() noexcept = default;
-		UciBase& operator=(const UciBase&) = default;
-		UciBase& operator=(UciBase&&) noexcept = default;
+		base() = default;
+		base(const base&) = default;
+		base(base&&) noexcept = default;
+		~base() noexcept = default;
+		base& operator=(const base&) = default;
+		base& operator=(base&&) noexcept = default;
 
 		// 
 		static bool check_token_count(const std::vector<std::string> & tokens, size_t min_tokens);

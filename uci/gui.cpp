@@ -1,5 +1,5 @@
-#include "uci_base.h"
-#include "uci_server.h"
+#include "base.h"
+#include "gui.h"
 
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -14,33 +14,33 @@ namespace uci
 
 	// -------------------------------- SEND ----------------------------------
 
-    void UciServer::send_id(const string & name, const string & author)
+    void gui::send_id(const string & name, const string & author)
     {
 		send_id_name(name);
 		send_id_author(author);
     }
 
-    void UciServer::send_id_name(const string & name)
+    void gui::send_id_name(const string & name)
     {
         os << "name " << name << endl;
     }
     
-    void UciServer::send_id_author(const string & author)
+    void gui::send_id_author(const string & author)
     {
         os << "author " << author << endl;
     }
     
-    void UciServer::send_uciok()
+    void gui::send_uciok()
     {
 		os << "uciok" << endl;
     }
     
-    void UciServer::send_readyok()
+    void gui::send_readyok()
     {
 		os << "readyok" << endl;
     }
 
-	void UciServer::send_bestmove(const std::string& bestMove, const std::string & ponderMove)
+	void gui::send_bestmove(const std::string& bestMove, const std::string & ponderMove)
 	{
 		os << "bestmove " << bestMove;
 
@@ -51,21 +51,21 @@ namespace uci
 		os << endl;
 	}
 
-	void UciServer::send_info(info info)
+	void gui::send_info(info info)
 	{
 		os << info << endl;
 	}
 
 	// -------------------------------- RECEIVE -------------------------------
 
-	const Command& UciServer::recv()
+	const Command& gui::recv()
 	{
 		this->parse_line(is);
 
 		return commands_in.back();
 	}
 
-	const Command& UciServer::recv_until(const std::string& cmd_to_wait_for)
+	const Command& gui::recv_until(const std::string& cmd_to_wait_for)
 	{
 		while (true) {
 			// Reads next currline from input stream. 
@@ -86,64 +86,64 @@ namespace uci
 		return commands_in.back();
 	}
 
-	const Command& UciServer::recv_until_uci()
+	const Command& gui::recv_until_uci()
 	{
 		return recv_until("uci");
 	}
 
-	const Command& UciServer::recv_until_debug()
+	const Command& gui::recv_until_debug()
 	{
 		return recv_until("debug");
 	}
 
-	const Command& UciServer::recv_until_isready()
+	const Command& gui::recv_until_isready()
 	{
 		return recv_until("isready");
 	}
 
-	const Command& UciServer::recv_until_setoption()
+	const Command& gui::recv_until_setoption()
 	{
 		return recv_until("setoption");
 	}
 
-	const Command& UciServer::recv_until_register()
+	const Command& gui::recv_until_register()
 	{
 		return recv_until("register");
 	}
 
-	const Command& UciServer::recv_until_ucinewgame()
+	const Command& gui::recv_until_ucinewgame()
 	{
 		return recv_until("ucinewgame");
 	}
 
-	const Command& UciServer::recv_until_position()
+	const Command& gui::recv_until_position()
 	{
 		return recv_until("position");
 	}
 
-	const Command& UciServer::recv_until_go()
+	const Command& gui::recv_until_go()
 	{
 		return recv_until("go");
 	}
 
-	const Command& UciServer::recv_until_stop()
+	const Command& gui::recv_until_stop()
 	{
 		return recv_until("stop");
 	}
 
-	const Command& UciServer::recv_until_ponderhit()
+	const Command& gui::recv_until_ponderhit()
 	{
 		return recv_until("ponderhit");
 	}
 
-	const Command& UciServer::recv_until_quit()
+	const Command& gui::recv_until_quit()
 	{
 		return recv_until("quit");
 	}
 
 	// -------------------------------- CALLBACKS -----------------------------
 
-    void UciServer::on_setoption(const Command& cmd)
+    void gui::on_setoption(const Command& cmd)
     {
 		// --- 1.) Generate an option object from command ---
 		options::option op;

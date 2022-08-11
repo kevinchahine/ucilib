@@ -3,7 +3,7 @@
 #include "uci/go.h"
 #include "uci/options/option.h"
 #include "uci/options/list.h"
-#include "uci/uci_base.h"
+#include "uci/base.h"
 #include "uci/debug.h"
 
 #include <boost/process/child.hpp>
@@ -14,17 +14,17 @@
 namespace uci
 {
 	// TODO: Why not simply call this 'Client' (no Uci)
-	class UciClient : public UciBase
+	class engine : public base
 	{
 	public:
-		UciClient(const boost::filesystem::path& engine_file_path);
+		engine(const boost::filesystem::path& engine_file_path);
 
-		UciClient() = default;
-		UciClient(const UciClient&) = default;
-		UciClient(UciClient&&) noexcept = default;
-		virtual ~UciClient() noexcept = default;
-		UciClient& operator=(const UciClient&) = default;
-		UciClient& operator=(UciClient&&) noexcept = default;
+		engine() = default;
+		engine(const engine&) = default;
+		engine(engine&&) noexcept = default;
+		virtual ~engine() noexcept = default;
+		engine& operator=(const engine&) = default;
+		engine& operator=(engine&&) noexcept = default;
 
 		void launch(const boost::filesystem::path& engine_file_path);
 
@@ -81,7 +81,7 @@ namespace uci
 		const std::string best_move() const { return bestmove; }
 		
 	protected:
-		boost::process::child engine;
+		boost::process::child engine_process;
 	
 		boost::process::ipstream is;
 		boost::process::opstream os;
