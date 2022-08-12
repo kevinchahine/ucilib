@@ -76,24 +76,39 @@ namespace uci
 	protected:
 
 		// Callbacks
-		void on_uci(const Command & cmd);
-		void on_debug(const Command & cmd);
-		void on_isready(const Command & cmd);
-		void on_setoption(const Command & cmd);
-		void on_register(const Command & cmd);
-		void on_ucinewgame(const Command & cmd);
-		void on_position(const Command & cmd);
-		void on_go(const Command & cmd);
-		void on_stop(const Command & cmd);
-		void on_ponderhit(const Command & cmd);
-		void on_quit(const Command & cmd);
+		void handle_uci(const Command & cmd);
+		void handle_debug(const Command & cmd);
+		void handle_isready(const Command & cmd);
+		void handle_setoption(const Command & cmd);
+		void handle_register(const Command & cmd);
+		void handle_ucinewgame(const Command & cmd);
+		void handle_position(const Command & cmd);
+		void handle_go(const Command & cmd);
+		void handle_stop(const Command & cmd);
+		void handle_ponderhit(const Command & cmd);
+		void handle_quit(const Command & cmd);
 
 	protected:
 		std::ostream & os;
 		std::istream & is;
 
+	public:
 		// List of all options which the server (GUI) has set
 		// through 'setoption' commands
 		options::list option_settings;
+
+		// --- User defined Callbacks ---
+		std::function<void(const Command& cmd)> on_uci;
+		std::function<void(const Command& cmd)> on_debug;
+		std::function<void(const Command& cmd)> on_isready;
+		std::function<void(const Command& cmd)> on_setoption;
+		std::function<void(const Command& cmd)> on_register;
+		std::function<void(const Command& cmd)> on_ucinewgame;
+		std::function<void(const Command& cmd)> on_position;
+		std::function<void(const Command& cmd)> on_go;
+		std::function<void(const Command& cmd)> on_stop;
+		std::function<void(const Command& cmd)> on_ponderhit;
+		std::function<void(const Command& cmd)> on_quit;
+
 	};
 } // namespace uci

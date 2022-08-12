@@ -143,14 +143,17 @@ namespace uci
 
 	// -------------------------------- CALLBACKS -----------------------------
 
-    void gui::on_setoption(const Command& cmd)
-    {
+	void gui::handle_setoption(const Command& cmd)
+	{
 		// --- 1.) Generate an option object from command ---
 		options::option op;
 		op.from(cmd);
 
 		// --- 2.) Push option object to list ---
 		option_settings.push_back(std::move(op));
-    }
+
+		// --- 3.) Call user defined callback ---
+		on_setoption(cmd);
+	}
 
 } // namespace uci

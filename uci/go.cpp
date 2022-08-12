@@ -6,6 +6,41 @@ using namespace std;
 
 namespace uci
 {
+	//go::go(const Command& cmd)
+	//{
+	//	//std::optional<std::list<std::string>> searchmoves;
+	//	//std::optional<void*> ponder;
+	//	//std::optional<int> wtime;
+	//	//std::optional<int> btime;
+	//	//std::optional<int> winc;
+	//	//std::optional<int> binc;
+	//	//std::optional<int> movestogo;
+	//	//std::optional<int> depth;
+	//	//std::optional<int> nodes;
+	//	//std::optional<int> mate;
+	//	//std::optional<int> movetime;
+	//	//std::optional<bool> infinite;	// Value is irrelevant. call infinite.has_value() to determine if infinite has been set.
+	//
+	//	for (size_t i = 0; i < cmd.size(); i++) {
+	//		const std::string& token = cmd.at(i);
+	//
+	//		if (token == "searchmoves") { 
+	//
+	//		} 
+	//		else if (token == "ponder") { } 
+	//		else if (token == "wtime") { } 
+	//		else if (token == "btime") { } 
+	//		else if (token == "winc") { } 
+	//		else if (token == "binc") { } 
+	//		else if (token == "movestogo") { } 
+	//		else if (token == "depth") { } 
+	//		else if (token == "nodes") { } 
+	//		else if (token == "mate") { } 
+	//		else if (token == "movetime") { } 
+	//		else if (token == "infinite") { } 
+	//	}
+	//}
+
 	boost::property_tree::ptree uci::go::serialize() const
 	{
 		boost::property_tree::ptree tree;

@@ -56,7 +56,7 @@ namespace uci
 		setoption to_setoption() const;
 		//option to_option() const;
 		void to_position() const;
-		go to_go() const;
+		//go to_go() const;
 		void to_id() const;
 		std::string to_bestmove() const;
 		info to_info() const;

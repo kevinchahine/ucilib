@@ -204,6 +204,11 @@ namespace uci
 		}
 	}
 
+	//go Command::to_go() const
+	//{
+	//	return go();
+	//}
+
 	//option Command::to_option() const
 	//{
 	//	option op;

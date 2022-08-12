@@ -13,7 +13,6 @@
 
 namespace uci
 {
-	// TODO: Why not simply call this 'Client' (no Uci)
 	class engine : public base
 	{
 	public:

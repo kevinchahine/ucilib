@@ -7,11 +7,21 @@
 
 #include <boost/property_tree/ptree_fwd.hpp>
 
+#include "commands/command.h"
+
 namespace uci
 {
 	class go
 	{
 	public:
+
+		go() = default;
+		//go(const Command& cmd);
+		go(const go&) = default;
+		go(go&&) noexcept = default;
+		~go() noexcept = default;
+		go& operator=(const go&) = default;
+		go& operator=(go&&) noexcept = default;
 
 		boost::property_tree::ptree serialize() const;
 

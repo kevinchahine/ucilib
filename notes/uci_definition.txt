@@ -448,7 +448,7 @@ uci
 		option name NalimovCache type spin default 1 min 1 max 32
 
 // the engine can switch off Nullmove and set the playing style
-	   option name Nullmove type check default true
+		option name Nullmove type check default true
   		option name Style type combo default Normal var Solid var Normal var Risky
 
 // the engine has sent all parameters and is ready

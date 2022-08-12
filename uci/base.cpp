@@ -24,15 +24,4 @@ namespace uci
 			}
 		}
 	}
-
-	void base::init()
-	{
-		// ------------------ DISPATCH CALLBACKS ------------------------------
-
-	}
-
-	void base::update()
-	{
-		context.poll();
-	}
 } // namespace uci

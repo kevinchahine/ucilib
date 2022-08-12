@@ -57,6 +57,7 @@ add_library(${LIBRARY_NAME} STATIC
 target_compile_features(${LIBRARY_NAME} PRIVATE cxx_std_17)
 
 include_directories(${LIBRARY_NAME}	".")
+include_directories(${LIBRARY_NAME} "uci")
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

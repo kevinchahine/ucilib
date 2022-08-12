@@ -1,8 +1,6 @@
 #pragma once
 
 #include <boost/process/pipe.hpp>
-//#include <boost/asio/io_service.hpp>
-#include <boost/asio/io_context.hpp>
 
 #include "commands/command.h"
 
@@ -29,25 +27,6 @@ namespace uci
 	// 
 	class base
 	{
-	public:
-		base() = default;
-		base(const base&) = default;
-		base(base&&) noexcept = default;
-		~base() noexcept = default;
-		base& operator=(const base&) = default;
-		base& operator=(base&&) noexcept = default;
-
-		// 
-		static bool check_token_count(const std::vector<std::string> & tokens, size_t min_tokens);
-
-		// ------------------ ASYNC -------------------------------------------
-
-		void init();
-
-		void update();
-
-		void terminate();
-
 	protected:
 		// reads characters from `is` stream parses into a command and 
 		// pushes to `commands_in` list
@@ -55,15 +34,6 @@ namespace uci
 		// Only valid commands will be inserted into `commands_in`
 		// Invalid commands will be ignored
 		void parse_line(std::istream& is);
-
-	protected:
-		//boost::asio::io_service context;	// TODO: Rename this 'ios' or 'service'
-		boost::asio::io_context context;
-
-		//std::istream is;	// stream from remote process
-		//std::ostream os;	// stream to   remote process
-		//boost::process::ipstream is;
-		//boost::process::opstream os;
 
 		// commands are appended to back on list (push_back() emplace_back())
 		// commands are removed and handled from front of list
