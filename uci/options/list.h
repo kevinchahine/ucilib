@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../options/option.h"
+#include "uci/commands/option.h"
 
 #include <vector>
 
@@ -8,7 +8,7 @@ namespace uci
 {
 	namespace options
 	{
-		class list : public std::vector<option>
+		class list : public std::vector<commands::option>
 		{
 		public:
 

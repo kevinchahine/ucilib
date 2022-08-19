@@ -6,11 +6,42 @@ project(${LIBRARY_NAME})
 add_compile_definitions(WIN32_LEAN_AND_MEAN)
 
 set(COMMANDS 
-	uci/commands.hpp
+	uci/commands/commands.hpp
+	uci/commands/helpers.cpp
+	uci/commands/helpers.h
+
+	uci/commands/command_base.h
+	uci/commands/bestmove.cpp
+	uci/commands/bestmove.h
 	uci/commands/command.cpp
 	uci/commands/command.h
+	uci/commands/copyprotection.cpp
+	uci/commands/copyprotection.h
+	uci/commands/debug.cpp
+	uci/commands/debug.h
+	uci/commands/go.cpp
+	uci/commands/go.h
+	uci/commands/id.cpp
+	uci/commands/id.h
+	uci/commands/info.cpp
+	uci/commands/info.h
+	uci/commands/isready.h
+	uci/commands/option.cpp
+	uci/commands/option.h
+	uci/commands/ponderhit.h
 	uci/commands/position.cpp
 	uci/commands/position.h
+	uci/commands/quit.h
+	uci/commands/readyok.h
+	uci/commands/register.cpp
+	uci/commands/register.h
+	uci/commands/registration.h
+	uci/commands/setoption.cpp
+	uci/commands/setoption.h
+	uci/commands/stop.h
+	uci/commands/uci.h
+	uci/commands/ucinewgame.h
+	uci/commands/uciok.h
 )
 
 set(NOTES
@@ -24,21 +55,21 @@ set(NOTES
 )
 
 set(OPTIONS
-	"uci/options/option.cpp"
-	"uci/options/option.h"
-	"uci/options/list.cpp"
-	"uci/options/list.h"
-	"uci/options/setoption.h"
+	#"uci/options/option.cpp"	# move to commands
+	#"uci/options/option.h"		# move to commands
+	#"uci/options/list.cpp"		
+	#"uci/options/list.h"
+	#"uci/options/setoption.h"	# move to commands
 )
 
 set(UCI
-	uci/debug.cpp
-	uci/debug.h
-	uci/go.cpp
-	uci/go.h
-	uci/info.cpp
-	uci/info.h
-	uci/uci.hpp
+	#uci/debug.cpp				# move to commands
+	#uci/debug.h					# move to commands
+	#uci/go.cpp					# move to commands
+	#uci/go.h					# move to commands
+	#uci/info.cpp				# move to commands
+	#uci/info.h					# move to commands
+	uci/uci.hpp					
 	uci/base.cpp
 	uci/base.h
 	uci/engine.cpp

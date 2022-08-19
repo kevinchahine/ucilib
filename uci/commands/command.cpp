@@ -1,5 +1,26 @@
 #include "command.h"
 
+#include "uci/commands/bestmove.h"
+#include "uci/commands/copyprotection.h"
+#include "uci/commands/debug.h"
+#include "uci/commands/go.h"
+#include "uci/commands/id.h"
+#include "uci/commands/info.h"
+#include "uci/commands/isready.h"
+#include "uci/commands/option.h"
+#include "uci/commands/ponderhit.h"
+#include "uci/commands/position.h"
+#include "uci/commands/quit.h"
+#include "uci/commands/readyok.h"
+#include "uci/commands/register.h"
+#include "uci/commands/registration.h"
+#include "uci/commands/setoption.h"
+#include "uci/commands/stop.h"
+#include "uci/commands/uci.h"
+#include "uci/commands/ucinewgame.h"
+#include "uci/commands/uciok.h"
+#include "uci/commands/helpers.h"
+
 #include <algorithm>
 #include <sstream>
 
@@ -11,328 +32,98 @@ using namespace std;
 
 namespace uci
 {
-	void parse_helper(
-		vector<string>& tokens,
-		const std::string& line,
-		boost::sregex_token_iterator& regex_it)
+	namespace commands
 	{
-		boost::sregex_token_iterator rend;
-
-		tokens.clear();
-
-		while (regex_it != rend)
+		void command::parse(const std::string& line)
 		{
-			tokens.emplace_back(*regex_it);
+			// --- 0.) Clear existing tokesn and puse currline into a stream ---
+			istringstream is(line);
 
-			++regex_it;
+			// --- 1.) parse command ---
+			string cmd;
+			is >> cmd;
+
+			boost::algorithm::to_lower(cmd);
+
+			// --- Determine which command we have ---
+			if (cmd == "uci")					cmd_ptr = make_unique<uci>();
+			else if (cmd == "debug")			cmd_ptr = make_unique<debug>();
+			else if (cmd == "isready")			cmd_ptr = make_unique<isready>();
+			else if (cmd == "setoption")		cmd_ptr = make_unique<setoption>();
+			else if (cmd == "register")			cmd_ptr = make_unique<register_cmd>();
+			else if (cmd == "ucinewgame")		cmd_ptr = make_unique<ucinewgame>();
+			else if (cmd == "position")			cmd_ptr = make_unique<position>();
+			else if (cmd == "go")				cmd_ptr = make_unique<go>();
+			else if (cmd == "stop")				cmd_ptr = make_unique<stop>();
+			else if (cmd == "ponderhit")		cmd_ptr = make_unique<ponderhit>();
+			else if (cmd == "quit")				cmd_ptr = make_unique<quit>();
+			else if (cmd == "id")				cmd_ptr = make_unique<id>();
+			else if (cmd == "uciok")			cmd_ptr = make_unique<uciok>();
+			else if (cmd == "readyok")			cmd_ptr = make_unique<readyok>();
+			else if (cmd == "bestmove")			cmd_ptr = make_unique<bestmove>();
+			else if (cmd == "copyprotection")	cmd_ptr = make_unique<copyprotection>();
+			else if (cmd == "registration")		cmd_ptr = make_unique<registration>();
+			else if (cmd == "info")				cmd_ptr = make_unique<info>();
+			else if (cmd == "option")			cmd_ptr = make_unique<option>();
+			else {
+				throw_exception("a command", cmd, line);
+			}
+			
+			// --- Parse command ---
+			cmd_ptr->parse(line);
 		}
-	}
+	} // namespace commands
 
-	ostream& operator<<(ostream& os, const Command& cmd)
-	{
-		for (const string& token : cmd) {
-			os << token << ' ';
-		}
-
-		return os;
-	}
-
-	std::string Command::to_quoted_string() const
-	{
-		stringstream ss;
-
-		for (const string& token : *this) {
-			ss << '\'' << token << "\' ";
-		}
-
-		return ss.str();
-	}
-
-	void Command::parse(const string& line)
-	{
-		// --- 0.) Clear existing tokesn and puse currline into a stream ---
-		this->clear();
-		istringstream is(line);
-
-		// --- 1.) parse command ---
-		string cmd;
-		is >> cmd;
-
-		boost::algorithm::to_lower(cmd);
-
-		// --- Set Option ---
-		if (cmd == "uci")					parse_uci(line);
-		else if (cmd == "debug")			parse_debug(line);
-		else if (cmd == "isready")			parse_isready(line);
-		else if (cmd == "setoption")		parse_setoption(line);
-		else if (cmd == "register")			parse_register(line);
-		else if (cmd == "ucinewgame")		parse_ucinewgame(line);
-		else if (cmd == "position")			parse_position(line);
-		else if (cmd == "go")				parse_go(line);
-		else if (cmd == "stop")				parse_stop(line);
-		else if (cmd == "ponderhit")		parse_ponderhit(line);
-		else if (cmd == "quit")				parse_quit(line);
-		else if (cmd == "id")				parse_id(line);
-		else if (cmd == "uciok")			parse_uciok(line);
-		else if (cmd == "readyok")			parse_readyok(line);
-		else if (cmd == "bestmove")			parse_bestmove(line);
-		else if (cmd == "copyprotection")	parse_copyprotection(line);
-		else if (cmd == "registration")		parse_registration(line);
-		else if (cmd == "info")				parse_info(line);
-		else if (cmd == "option")			parse_option(line);
-		else {
-			//	cout << "Error: " << __FILE__ << " currline " << __LINE__ << " Invalid command: \'" << currline << "\'" << endl;
-			setAsInvalid();
-		}
-	}
-
-	// -------------------------------- IS COMMAND ----------------------------
-
-	bool Command::is_cmd(const std::string& cmd)
-	{
-		return this->cmd() == cmd;
-	}
-
-	bool Command::is_uci() const
-	{
-		return this->cmd() == "uci";
-	}
-
-	bool Command::is_debug() const
-	{
-		return this->cmd() == "debug";
-	}
-
-	bool Command::is_isready() const
-	{
-		return this->cmd() == "isready";
-	}
-
-	bool Command::is_setoption() const
-	{
-		return this->cmd() == "setoption";
-	}
-
-	bool Command::is_register() const
-	{
-		return this->cmd() == "register";
-	}
-
-	bool Command::is_ucinewgame() const
-	{
-		return this->cmd() == "ucinewgame";
-	}
-
-	bool Command::is_position() const
-	{
-		return this->cmd() == "position";
-	}
-
-	bool Command::is_go() const
-	{
-		return this->cmd() == "go";
-	}
-
-	bool Command::is_stop() const
-	{
-		return this->cmd() == "stop";
-	}
-
-	bool Command::is_ponderhit() const
-	{
-		return this->cmd() == "ponderhit";
-	}
-
-	bool Command::is_quit() const
-	{
-		return this->cmd() == "quit";
-	}
-
-	bool Command::is_id() const
-	{
-		return this->cmd() == "id";
-	}
-
-	bool Command::is_uciok() const
-	{
-		return this->cmd() == "uciok";
-	}
-
-	bool Command::is_readyok() const
-	{
-		return this->cmd() == "readyok";
-	}
-
-	bool Command::is_bestmove() const
-	{
-		return this->cmd() == "bestmove";
-	}
-
-	bool Command::is_copyprotection() const
-	{
-		return this->cmd() == "copyprotection";
-	}
-
-	bool Command::is_registration() const
-	{
-		return this->cmd() == "registration";
-	}
-
-	bool Command::is_info() const
-	{
-		return this->cmd() == "info";
-	}
-
-	bool Command::is_option() const
-	{
-		return this->cmd() == "option";
-	}
-
-	bool Command::to_debug() const
-	{
-		const string& d = (*this)[1];
-
-		if (d == "on") {
-			return true;
-		}
-		else if (d == "off") {
-			return false;
-		}
-		else {
-			// Throw exception or just ignore
-			return false;
-		}
-	}
-
-	//go Command::to_go() const
+	//void parse_helper(
+	//	vector<string>& tokens,
+	//	const std::string& line,
+	//	boost::sregex_token_iterator& regex_it)
 	//{
-	//	return go();
-	//}
-
-	//option Command::to_option() const
-	//{
-	//	option op;
+	//	boost::sregex_token_iterator rend;
 	//
-	//	
+	//	tokens.clear();
 	//
-	//	return op;
+	//	while (regex_it != rend)
+	//	{
+	//		tokens.emplace_back(*regex_it);
+	//
+	//		++regex_it;
+	//	}
 	//}
 
 	// -------------------------------- PARSE ---------------------------------
 
-	void Command::parse_uci(const std::string& line)
-	{
-		this->resize(1);
+	//void Command::parse_setoption(const std::string& line)
+	//{
+	//	// expression: setoption name <id> [value <x>]
+	//
+	//	if (boost::algorithm::contains(line, "value")) {
+	//		// TODO: Optimize: Consider making regex const static to prevent
+	//		// reconstruction on reach function call
+	//		boost::regex regex(R"dil((setoption)\s+(name)\s+(.+)\s+(value)\s+(.+))dil");
+	//
+	//		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3, 4, 5 });
+	//
+	//		parse_helper(*this, line, regex_it);
+	//	}
+	//	else {
+	//		boost::regex regex(R"dil((setoption)\s+(name)\s+(.+))dil");
+	//
+	//		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3 });
+	//
+	//		parse_helper(*this, line, regex_it);
+	//	}
+	//}
 
-		this->front() = "uci";
-	}
-
-	void Command::parse_debug(const std::string& line)
-	{
-		boost::regex regex(R"dil((debug)\s+(on|off))dil");
-
-		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2 });
-
-		parse_helper(*this, line, regex_it);
-	}
-
-	void Command::parse_isready(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "isready";
-	}
-
-	void Command::parse_setoption(const std::string& line)
-	{
-		// expression: setoption name <id> [value <x>]
-
-		if (boost::algorithm::contains(line, "value")) {
-			// TODO: Optimize: Consider making regex const static to prevent
-			// reconstruction on reach function call
-			boost::regex regex(R"dil((setoption)\s+(name)\s+(.+)\s+(value)\s+(.+))dil");
-
-			boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3, 4, 5 });
-
-			parse_helper(*this, line, regex_it);
-		}
-		else {
-			boost::regex regex(R"dil((setoption)\s+(name)\s+(.+))dil");
-
-			boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3 });
-
-			parse_helper(*this, line, regex_it);
-		}
-	}
-
+	/*
 	void Command::parse_register(const std::string& line)
 	{
-		// expressions:
-		//	register later
-		//	register name <x>
-		//	register code <y>
 
-		if (line.find("later") != string::npos) {
-			boost::regex regex(R"dil((register)\s+(later)$)dil");
-
-			boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2 });
-
-			parse_helper(*this, line, regex_it);
-		}
-		else if (line.find("name") != string::npos || line.find("code") != string::npos) {
-			boost::regex regex(R"dil((register)\s+(name|code)\s+([\w\s]+))dil");
-
-			boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3 });
-
-			parse_helper(*this, line, regex_it);
-		}
-	}
-
-	void Command::parse_ucinewgame(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "ucinewgame";
 	}
 
 	void Command::parse_position(const std::string& line)
 	{
-		// expression: position [fen <fenstring> | startpos ]  moves <move1> .... <movei>
 
-		boost::regex regex;
-		boost::sregex_token_iterator regex_it;
-
-		string fenstring = R"dil([kqrbnp\d\/]+\s+[bw]\s+[kq]+\s+-\s+\d+\s+\d+)dil";
-
-		if (boost::algorithm::contains(line, "fen")) {
-			// position fen <fenstring> [ moves <move1> .... <movei> ]
-			// position fen <fenstring>   moves <move1> .... <movei>
-			// position fen <fenstring>
-			regex = boost::regex(R"dil((position)\s+(fen)\s+([KkQqRrBbNnPp\d\/]+\s+[BbWw]\s+[KQkq]+\s+-\s+\d+\s+\d+)\s*(moves\s+.*)?)dil");
-
-			regex_it = boost::sregex_token_iterator(line.begin(), line.end(), regex, { 1, 2, 3, 4 });
-		}
-		else if (boost::algorithm::contains(line, "startpos")) {
-			// position startpos [ moves <move1> .... <movei> ]
-			// position startpos   moves <move1> .... <movei> 
-			// position startpos
-			regex = boost::regex(R"dil((position)\s+(startpos)\s*(moves\s+.*)?)dil");
-
-			regex_it = boost::sregex_token_iterator(line.begin(), line.end(), regex, { 1, 2, 3 });
-		}
-
-		parse_helper(*this, line, regex_it);
-
-		// If parse moves 
-		if (this->size() && boost::algorithm::starts_with(this->back(), "moves")) {
-			string last = move(this->back());
-			this->pop_back();
-
-			vector<string> tokens;
-			boost::split(tokens, last, boost::is_any_of(" "), boost::token_compress_on);
-
-			move(tokens.begin(), tokens.end(), back_inserter(*this));
-		}
 	}
 
 	void Command::parse_go(const std::string& line)
@@ -346,7 +137,7 @@ namespace uci
 		//	* btime <x>			...
 		//	* winc <x>			positive integer number
 		//	* binc <x>			...
-		//	* movestogo <x>		integer 
+		//	* movestogo <x>		integer
 		//	* depth <x>
 		//	* nodes <x>
 		//	* mate <x>
@@ -360,27 +151,6 @@ namespace uci
 		// TODO: Finish this
 	}
 
-	void Command::parse_stop(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "stop";
-	}
-
-	void Command::parse_ponderhit(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "ponderhit";
-	}
-
-	void Command::parse_quit(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "quit";
-	}
-
 	void Command::parse_id(const std::string& line)
 	{
 		// expressions:
@@ -392,20 +162,6 @@ namespace uci
 		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3 });
 
 		parse_helper(*this, line, regex_it);
-	}
-
-	void Command::parse_uciok(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "uciok";
-	}
-
-	void Command::parse_readyok(const std::string& line)
-	{
-		this->resize(1);
-
-		this->front() = "readyok";
 	}
 
 	void Command::parse_bestmove(const std::string& line)
@@ -516,46 +272,47 @@ namespace uci
 
 			parse_helper(*this, line, regex_it);
 		}
-	}
+	}*/
 
-	void Command::parse_option(const std::string& line)
-	{
-		// expressions:
-		// option name <id> type <type> default <default> min <min> max <max> var <var>
-		// 
-		// option name Nullmove type check default true
-		// option name Selectivity type spin default 2 min 0 max 4
-		// option name Style type combo default Normal var Solid var Normal var Risky
-		// option name NalimovPath type string default c:\
-		// option name Clear Hash type button
-		// option name UCI_EngineAbout type string default Shredder by Stefan Meyer-Kahlen, see www.shredderchess.com"
-
-		boost::regex regex(R"dil((option)\s+(name)\s+(\w+)\s+(type)\s+(check|spin|combo|button|string)\s+(.*))dil");
-
-		boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3, 4, 5, 6 });
-
-		parse_helper(*this, line, regex_it);
-
-		if (this->size() >= 6) {
-			string last = std::move(this->back());
-			this->pop_back();
-
-			vector<string> temp;
-
-			if (this->at(4) == "string") {
-				regex = boost::regex(R"dil((default)\s+(.*))dil");
-
-				regex_it = boost::sregex_token_iterator(last.begin(), last.end(), regex, { 1, 2 });
-
-				parse_helper(temp, last, regex_it);
-			}
-			else {
-				boost::split(temp, last, boost::is_space());
-			}
-
-			for (string& str : temp) {
-				this->emplace_back(move(str));
-			}
-		}
-	}
+	//void Command::parse_option(const std::string& line)
+	//{
+		//// expressions:
+		//// option name <id> type <type> default <default> min <min> max <max> var <var>
+		//// 
+		//// option name Nullmove type check default true
+		//// option name Selectivity type spin default 2 min 0 max 4
+		//// option name Style type combo default Normal var Solid var Normal var Risky
+		//// option name NalimovPath type string default c:\
+		//// option name Clear Hash type button
+		//// option name UCI_EngineAbout type string default Shredder by Stefan Meyer-Kahlen, see www.shredderchess.com"
+		//
+		//boost::regex regex(R"dil((option)\s+(name)\s+(\w+)\s+(type)\s+(check|spin|combo|button|string)\s+(.*))dil");
+		//
+		//boost::sregex_token_iterator regex_it(line.begin(), line.end(), regex, { 1, 2, 3, 4, 5, 6 });
+		//
+		//parse_helper(*this, line, regex_it);
+		//
+		//if (this->size() >= 6) {
+		//	string last = std::move(this->back());
+		//	this->pop_back();
+		//
+		//	vector<string> temp;
+		//
+		//	if (this->at(4) == "string") {
+		//		regex = boost::regex(R"dil((default)\s+(.*))dil");
+		//
+		//		regex_it = boost::sregex_token_iterator(last.begin(), last.end(), regex, { 1, 2 });
+		//
+		//		parse_helper(temp, last, regex_it);
+		//	}
+		//	else {
+		//		boost::split(temp, last, boost::is_space());
+		//	}
+		//
+		//	for (string& str : temp) {
+		//		this->emplace_back(move(str));
+		//	}
+		//}
+	//}
 } // namespace uci
+

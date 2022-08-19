@@ -37,6 +37,6 @@ namespace uci
 
 		// commands are appended to back on list (push_back() emplace_back())
 		// commands are removed and handled from front of list
-		std::list<Command> commands_in;	// stores parsed commands from `is`
+		std::list<commands::command> commands_in;	// stores parsed commands from `is`
 	};
 } // namespace uci
