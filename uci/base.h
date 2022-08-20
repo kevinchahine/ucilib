@@ -34,7 +34,11 @@ namespace uci
 		// Only valid commands will be inserted into `commands_in`
 		// Invalid commands will be ignored
 		void parse_line(std::istream& is);
+		
+		// TODO: Make this the only recv_until. Remove the derived classes implementations of it
+		////const commands::command& recv_until(const commands::command& cmd_to_wait_for);
 
+	public:
 		// commands are appended to back on list (push_back() emplace_back())
 		// commands are removed and handled from front of list
 		std::list<commands::command> commands_in;	// stores parsed commands from `is`

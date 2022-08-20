@@ -2,9 +2,7 @@
 
 #include "base.h"
 
-#include "uci/commands/uci.h"
-#include "options/option.h"
-#include "options/list.h"
+#include "uci/commands/commands.hpp"
 
 #include <thread>
 
@@ -31,84 +29,82 @@ namespace uci
 	//	use std::cin and std::cout when communicating with UCI Server (UCI GUI)
 	class gui : public base
 	{
-	//public:
-	//	gui() :
-	//		os(std::cout),
-	//		is(std::cin) {}
-	//
-	//	// ---------------------------- SEND ----------------------------------
-	//
-	//	void send_id(const std::string& name, const std::string& author);
-	//	void send_id_name(const std::string& name);
-	//	void send_id_author(const std::string& author);
-	//	void send_uciok();
-	//	void send_readyok();
-	//	void send_bestmove(const std::string & bestMove, const std::string & ponderMove);
-	//	//void send_copyprotection(CopyProtection copyProtection);
-	//	//void send_register(Registration registration);
-	//	void send_info(info info);
-	//	template<class OPTION_T> void send_option(const OPTION_T& op) { os << op << std::endl; }
-	//
-	//	// ---------------------------- RECEIVE -------------------------------
-	//	
-	//	// Waits until the next command is received from server (gui) before returning.
-	//	// Returns command. Command may be valid or invalid. Check using a call to Command::isValid()
-	//	// Method will block until the next command is received.
-	//	const Command & recv();
-	//
-	//	// Waits until a specific command is received from server (gui) before returning.
-	//	// Received command must be valid. Method will continue to block until a valid command is received
-	//	// and matches `cmd_to_wait_for`.
-	//	// Blocking call. 
-	//	const Command & recv_until(const std::string& cmd_to_wait_for);
-	//	const Command & recv_until_uci();
-	//	const Command & recv_until_debug();
-	//	const Command & recv_until_isready();
-	//	const Command & recv_until_setoption();
-	//	const Command & recv_until_register();
-	//	const Command & recv_until_ucinewgame();
-	//	const Command & recv_until_position();
-	//	const Command & recv_until_go();
-	//	const Command & recv_until_stop();
-	//	const Command & recv_until_ponderhit();
-	//	const Command & recv_until_quit();
-	//
-	//protected:
-	//
-	//	// Callbacks
-	//	void handle_uci(const Command & cmd);
-	//	void handle_debug(const Command & cmd);
-	//	void handle_isready(const Command & cmd);
-	//	void handle_setoption(const Command & cmd);
-	//	void handle_register(const Command & cmd);
-	//	void handle_ucinewgame(const Command & cmd);
-	//	void handle_position(const Command & cmd);
-	//	void handle_go(const Command & cmd);
-	//	void handle_stop(const Command & cmd);
-	//	void handle_ponderhit(const Command & cmd);
-	//	void handle_quit(const Command & cmd);
-	//
-	//protected:
-	//	std::ostream & os;
-	//	std::istream & is;
-	//
-	//public:
-	//	// List of all options which the server (GUI) has set
-	//	// through 'setoption' commands
-	//	options::list option_settings;
-	//
-	//	// --- User defined Callbacks ---
-	//	std::function<void(const Command& cmd)> on_uci;
-	//	std::function<void(const Command& cmd)> on_debug;
-	//	std::function<void(const Command& cmd)> on_isready;
-	//	std::function<void(const Command& cmd)> on_setoption;
-	//	std::function<void(const Command& cmd)> on_register;
-	//	std::function<void(const Command& cmd)> on_ucinewgame;
-	//	std::function<void(const Command& cmd)> on_position;
-	//	std::function<void(const Command& cmd)> on_go;
-	//	std::function<void(const Command& cmd)> on_stop;
-	//	std::function<void(const Command& cmd)> on_ponderhit;
-	//	std::function<void(const Command& cmd)> on_quit;
-	//
+	public:
+		gui() :
+			os(std::cout),
+			is(std::cin) {}
+	
+		// ---------------------------- SEND ----------------------------------
+		
+		void send(const commands::command& cmd);
+		void send_id(const commands::id& id);
+		void send_uciok();
+		void send_readyok();
+		void send_bestmove(const commands::bestmove& bestmove);
+		void send_copyprotection(const commands::copyprotection& copyprotection);
+		void send_register(const commands::register_cmd& register_cmd);
+		void send_info(const commands::info & info);
+		void send_option(const commands::option& option);
+
+		// ---------------------------- RECEIVE -------------------------------
+		
+		// Waits until the next command is received from server (gui) before returning.
+		// Method will block until the next command is received.
+		const commands::command & recv();
+		
+		// Waits until a specific command is received from server (gui) before returning.
+		// Received command must be valid. Method will continue to block until a valid command is received
+		// and matches `cmd_to_wait_for`.
+		// Blocking call. 
+		const commands::command& recv_until(const commands::command& cmd_to_wait_for);
+		const commands::uci & recv_until_uci();
+		const commands::debug & recv_until_debug();
+		const commands::isready & recv_until_isready();
+		const commands::setoption & recv_until_setoption();
+		const commands::register_cmd & recv_until_register();
+		const commands::ucinewgame & recv_until_ucinewgame();
+		const commands::position & recv_until_position();
+		const commands::go & recv_until_go();
+		const commands::stop & recv_until_stop();
+		const commands::ponderhit & recv_until_ponderhit();
+		const commands::quit & recv_until_quit();
+	
+	protected:
+	
+		// Callbacks
+		////void handle_uci(const Command & cmd);
+		////void handle_debug(const Command & cmd);
+		////void handle_isready(const Command & cmd);
+		////void handle_setoption(const Command & cmd);
+		////void handle_register(const Command & cmd);
+		////void handle_ucinewgame(const Command & cmd);
+		////void handle_position(const Command & cmd);
+		////void handle_go(const Command & cmd);
+		////void handle_stop(const Command & cmd);
+		////void handle_ponderhit(const Command & cmd);
+		////void handle_quit(const Command & cmd);
+	
+	protected:
+		std::ostream & os;
+		std::istream & is;
+	
+	public:
+		// List of all options which the server (GUI) has set
+		// through 'setoption' commands
+		////options::list option_settings;
+	
+		// --- User defined Callbacks ---
+		//std::function<void(const Command& cmd)> on_uci;
+		//std::function<void(const Command& cmd)> on_debug;
+		//std::function<void(const Command& cmd)> on_isready;
+		//std::function<void(const Command& cmd)> on_setoption;
+		//std::function<void(const Command& cmd)> on_register;
+		//std::function<void(const Command& cmd)> on_ucinewgame;
+		//std::function<void(const Command& cmd)> on_position;
+		//std::function<void(const Command& cmd)> on_go;
+		//std::function<void(const Command& cmd)> on_stop;
+		//std::function<void(const Command& cmd)> on_ponderhit;
+		//std::function<void(const Command& cmd)> on_quit;
+	
 	};
 } // namespace uci

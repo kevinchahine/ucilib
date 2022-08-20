@@ -96,7 +96,7 @@ namespace uci
 			template<class OPTION_T>
 			option(const OPTION_T& op) : ptr(std::make_unique<OPTION_T>(op))
 			{
-				static_assert(std::is_base_of<uci::commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
+				static_assert(std::is_base_of<commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
 			}
 			option(option&&) noexcept = default;
 			virtual ~option() noexcept = default;
@@ -107,7 +107,7 @@ namespace uci
 			template<class OPTION_T>
 			option& operator=(const OPTION_T& op)
 			{
-				static_assert(std::is_base_of<uci::commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
+				static_assert(std::is_base_of<commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
 
 				this->ptr = std::make_unique<OPTION_T>(op);
 
@@ -136,8 +136,10 @@ namespace uci
 			
 			friend std::ostream& operator<<(std::ostream& os, const option& op)
 			{
-				os << "option name " << op.option_name << op.ptr->to_string();
-				//os << op.to_string();
+				os << "option name " << op.option_name;
+				
+				if (op.ptr != nullptr) os << op.ptr->to_string();
+				else os << "!invalid option!";
 			
 				return os;
 			}

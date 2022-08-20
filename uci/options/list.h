@@ -8,6 +8,7 @@ namespace uci
 {
 	namespace options
 	{
+		// TODO: Move this to uci::commands
 		class list : public std::vector<commands::option>
 		{
 		public:

@@ -35,6 +35,7 @@ set(COMMANDS
 	uci/commands/readyok.h
 	uci/commands/register.cpp
 	uci/commands/register.h
+	uci/commands/registration.cpp
 	uci/commands/registration.h
 	uci/commands/setoption.cpp
 	uci/commands/setoption.h

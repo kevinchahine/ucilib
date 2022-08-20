@@ -14,7 +14,7 @@ namespace uci
 
 			friend std::ostream& operator<<(std::ostream& os, const bestmove& obj)
 			{
-				os << "bestmove " << obj.best;
+				os << "bestmove " << obj.move;
 
 				if (obj.ponder.has_value()) {
 					os << " ponder " << obj.ponder.value();
@@ -24,7 +24,7 @@ namespace uci
 			}
 
 		public:
-			forge::Move best;
+			forge::Move move;
 			std::optional<forge::Move> ponder;
 		};
 	} // namespace commands

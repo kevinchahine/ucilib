@@ -193,7 +193,7 @@ namespace uci
 			std::optional<int> cpuload;
 			std::optional<std::string> string_val;
 			std::optional<std::vector<std::string>> refutation;
-			std::optional<currline> currline_val;
+			std::optional<currline> currline_val;	// can we call this currline instead
 		};
 	} // namespace commands
 } // namespace uci

@@ -45,6 +45,9 @@ namespace uci
 				std::string::size_type val_begin = line.find_first_not_of(' ', key_pos.end);
 				std::string::size_type next_key_begin = (i + 1 < separators_pos.size() ? separators_pos.at(i + 1).begin : line.size());
 
+				if (val_begin == string::npos) val_begin = line.size();
+				if (next_key_begin == string::npos) next_key_begin = line.size();
+
 				// Extract substring of each token
 				// TODO: Try to do this with string_view to save on copy ops
 				std::string key = line.substr(key_pos.begin, key_pos.end - key_pos.begin);

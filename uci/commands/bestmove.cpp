@@ -31,7 +31,7 @@ namespace uci
 
 			++regex_it;									// skip 'bestmove'
 
-			this->best = forge::Move(*(regex_it++));	// extract 'move1'
+			this->move = forge::Move(*(regex_it++));	// extract 'move1'
 
 			if (regex_it != end)	++regex_it;			// skip 'ponder'
 

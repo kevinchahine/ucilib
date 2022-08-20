@@ -38,7 +38,7 @@ namespace uci
 				return os;
 			}
 
-		private:
+		public:
 			std::string pos;				// position as a string (fen or startpos)
 			std::vector<forge::Move> moves;	// move sequence
 		};

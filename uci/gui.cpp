@@ -10,135 +10,69 @@ using namespace std;
 
 namespace uci
 {
-	//// -------------------------------- SEND ----------------------------------
-	//
-    //void gui::send_id(const string & name, const string & author)
-    //{
-	//	send_id_name(name);
-	//	send_id_author(author);
-    //}
-	//
-    //void gui::send_id_name(const string & name)
-    //{
-    //    os << "name " << name << endl;
-    //}
-    //
-    //void gui::send_id_author(const string & author)
-    //{
-    //    os << "author " << author << endl;
-    //}
-    //
-    //void gui::send_uciok()
-    //{
-	//	os << "uciok" << endl;
-    //}
-    //
-    //void gui::send_readyok()
-    //{
-	//	os << "readyok" << endl;
-    //}
-	//
-	//void gui::send_bestmove(const std::string& bestMove, const std::string & ponderMove)
-	//{
-	//	os << "bestmove " << bestMove;
-	//
-	//	if (ponderMove.size()) {
-	//		os << "ponder " << ponderMove;
-	//	}
-	//
-	//	os << endl;
-	//}
-	//
-	//void gui::send_info(info info)
-	//{
-	//	os << info << endl;
-	//}
-	//
-	//// -------------------------------- RECEIVE -------------------------------
-	//
-	//const Command& gui::recv()
-	//{
-	//	this->parse_line(is);
-	//
-	//	return commands_in.back();
-	//}
-	//
-	//const Command& gui::recv_until(const std::string& cmd_to_wait_for)
-	//{
-	//	while (true) {
-	//		// Reads next currline from input stream. 
-	//		// Blocking call. Blocks until entire line is read.
-	//		// If line is a valid command, it will be appended to back of `commands_in`
-	//		// Invalid commands will be deleted and method will return
-	//		this->parse_line(is);
-	//
-	//		if (commands_in.size()) {
-	//			const Command& cmd = commands_in.back();
-	//
-	//			if (cmd.cmd() == cmd_to_wait_for) {
-	//				break;
-	//			}
-	//		}
-	//	}
-	//
-	//	return commands_in.back();
-	//}
-	//
-	//const Command& gui::recv_until_uci()
-	//{
-	//	return recv_until("uci");
-	//}
-	//
-	//const Command& gui::recv_until_debug()
-	//{
-	//	return recv_until("debug");
-	//}
-	//
-	//const Command& gui::recv_until_isready()
-	//{
-	//	return recv_until("isready");
-	//}
-	//
-	//const Command& gui::recv_until_setoption()
-	//{
-	//	return recv_until("setoption");
-	//}
-	//
-	//const Command& gui::recv_until_register()
-	//{
-	//	return recv_until("register");
-	//}
-	//
-	//const Command& gui::recv_until_ucinewgame()
-	//{
-	//	return recv_until("ucinewgame");
-	//}
-	//
-	//const Command& gui::recv_until_position()
-	//{
-	//	return recv_until("position");
-	//}
-	//
-	//const Command& gui::recv_until_go()
-	//{
-	//	return recv_until("go");
-	//}
-	//
-	//const Command& gui::recv_until_stop()
-	//{
-	//	return recv_until("stop");
-	//}
-	//
-	//const Command& gui::recv_until_ponderhit()
-	//{
-	//	return recv_until("ponderhit");
-	//}
-	//
-	//const Command& gui::recv_until_quit()
-	//{
-	//	return recv_until("quit");
-	//}
-	//
+	// -------------------------------- SEND ----------------------------------
+	void gui::send(const commands::command& cmd) { os << cmd << endl; }
+	
+	void gui::send_id(const commands::id& id) { os << id << endl; }
+
+	void gui::send_uciok() { os << commands::uciok{} << endl; }
+
+	void gui::send_readyok() { os << commands::readyok{} << endl; }
+
+	void gui::send_bestmove(const commands::bestmove& bestmove) { os << bestmove << endl; }
+
+	void gui::send_copyprotection(const commands::copyprotection& copyprotection) { os << copyprotection << endl; }
+
+	void gui::send_register(const commands::register_cmd& register_cmd) { os << register_cmd << endl; }
+
+	void gui::send_info(const commands::info& info) { os << info << endl; }
+
+	void gui::send_option(const commands::option& option) { os << option << endl; }
+
+	// -------------------------------- RECEIVE -------------------------------
+
+	const commands::command& gui::recv()
+	{
+		this->parse_line(is);
+
+		return commands_in.back();
+	}
+
+	const commands::command& gui::recv_until(const commands::command& cmd_to_wait_for)
+	{
+		while (true) {
+			// Reads next currline from input stream. 
+			// Blocking call. Blocks until entire currline is read.
+			// If currline is a valid command, it will be appended to back of `commands_in`
+			// Invalid commands will be deleted and method will return
+			this->parse_line(is);
+
+			if (commands_in.size()) {
+				const commands::command& curr_command = commands_in.back();
+
+				if (curr_command.is_valid()) {
+					if (curr_command.is_same_as(cmd_to_wait_for)) {
+						break;
+					}
+				}
+			}
+		}
+
+		return commands_in.back();
+	}
+
+	const commands::uci& gui::recv_until_uci() { return recv_until(commands::uci{}).as<commands::uci>(); }
+	const commands::debug& gui::recv_until_debug() { return recv_until(commands::debug{}).as<commands::debug>(); }
+	const commands::isready& gui::recv_until_isready() { return recv_until(commands::isready{}).as<commands::isready>(); }
+	const commands::setoption& gui::recv_until_setoption() { return recv_until(commands::setoption{}).as<commands::setoption>(); }
+	const commands::register_cmd& gui::recv_until_register() { return recv_until(commands::register_cmd{}).as<commands::register_cmd>(); }
+	const commands::ucinewgame& gui::recv_until_ucinewgame() { return recv_until(commands::ucinewgame{}).as<commands::ucinewgame>(); }
+	const commands::position& gui::recv_until_position() { return recv_until(commands::position{}).as<commands::position>(); }
+	const commands::go& gui::recv_until_go() { return recv_until(commands::go{}).as<commands::go>(); }
+	const commands::stop& gui::recv_until_stop() { return recv_until(commands::stop{}).as<commands::stop>(); }
+	const commands::ponderhit& gui::recv_until_ponderhit() { return recv_until(commands::ponderhit{}).as<commands::ponderhit>(); }
+	const commands::quit& gui::recv_until_quit() { return recv_until(commands::quit{}).as<commands::quit>(); }
+
 	//// -------------------------------- CALLBACKS -----------------------------
 	//
 	//void gui::handle_setoption(const Command& cmd)

@@ -20,6 +20,13 @@ namespace uci
 			virtual void parse(const std::string& line) = 0;
 
 			virtual std::string to_string() const = 0;
+
+			virtual std::string command_name() const = 0;
+
+			virtual std::unique_ptr<command_base> clone() const = 0;
+			
+			// Determines if polymorphic objects are of the same type.
+			virtual bool is_same_as(const command_base& right) const = 0;
 		};
 
 		// This class is used to generalize any functionallity common to all or most command classes.
@@ -43,6 +50,20 @@ namespace uci
 				ss << static_cast<const T&>(*this);
 
 				return ss.str();
+			}
+
+			virtual std::string command_name() const override { return typeid(T).name(); }
+
+			virtual std::unique_ptr<command_base> clone() const override
+			{
+				std::unique_ptr<T> duplicate = std::make_unique<T>();
+
+				return duplicate;
+			}
+
+			virtual bool is_same_as(const command_base& right) const override
+			{
+				return dynamic_cast<const T*>(&right);
 			}
 		};
 	} // namespace commands

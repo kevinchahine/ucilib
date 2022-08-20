@@ -13,16 +13,16 @@ namespace uci
 		void registration::parse(const std::string& line)
 		{
 			// expression: copyprotection ok|error
-
+		
 			boost::regex regex(R"dil((registration)\s+(ok|error|checking))dil");
 			boost::sregex_token_iterator regex_it;
 			boost::sregex_token_iterator end;
-
+		
 			regex_it = boost::sregex_token_iterator(line.begin(), line.end(), regex, { 1, 2 });
-
+		
 			const string& cmd_name = *regex_it++;
 			assert_token("registration", cmd_name, line);
-
+		
 			const string& value = *regex_it;
 			if (value == "ok")				this->value = VALUE::OK;
 			else if (value == "error")		this->value = VALUE::ERROR_;

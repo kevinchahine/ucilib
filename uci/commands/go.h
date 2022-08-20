@@ -12,7 +12,6 @@ namespace uci
 		class go : public command_base_template<go>
 		{
 		public:
-			// TODO: 
 			virtual void parse(const std::string& line) override;
 
 			friend std::ostream& operator<<(std::ostream& os, const go& go)
