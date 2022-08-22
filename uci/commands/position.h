@@ -39,7 +39,7 @@ namespace uci
 			}
 
 		public:
-			std::string pos;				// position as a string (fen or startpos)
+			std::string pos = "startpos";	// position as a string (fen or startpos)
 			std::vector<forge::Move> moves;	// move sequence
 		};
 	} // namespace commands

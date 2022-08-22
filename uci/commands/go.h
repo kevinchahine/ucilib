@@ -12,6 +12,10 @@ namespace uci
 		class go : public command_base_template<go>
 		{
 		public:
+			boost::property_tree::ptree serialize() const;
+
+			void parse(const boost::property_tree::ptree& tree);
+
 			virtual void parse(const std::string& line) override;
 
 			friend std::ostream& operator<<(std::ostream& os, const go& go)

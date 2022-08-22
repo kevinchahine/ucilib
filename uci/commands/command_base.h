@@ -9,6 +9,8 @@
 #include <sstream>
 #include <optional>
 
+#include <boost/property_tree/ptree_fwd.hpp>
+
 namespace uci
 {
 	namespace commands
