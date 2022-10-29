@@ -30,10 +30,10 @@ namespace uci
 	class gui : public base
 	{
 	public:
-		gui() :
-			os(std::cout),
-			is(std::cin) {}
-	
+		gui(std::ostream& os = std::cout, std::istream& is = std::cin) :
+			os(os),
+			is(is) {}
+
 		// ---------------------------- SEND ----------------------------------
 		
 		void send(const commands::command& cmd);

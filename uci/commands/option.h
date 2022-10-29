@@ -22,6 +22,8 @@ namespace uci
 				// option name <option_name> type <option_type>
 				virtual void parse(const std::string& line) = 0;
 
+				virtual std::unique_ptr<base> clone() const = 0;
+
 				friend std::ostream& operator<<(std::ostream& os, const base& op)
 				{
 					os << op.to_string();
@@ -38,6 +40,11 @@ namespace uci
 				// See comments for base::parse()
 				virtual void parse(const std::string& line) override;
 
+				virtual std::unique_ptr<base> clone() const override
+				{
+					return std::make_unique<base>(*this);
+				}
+
 				std::optional<bool> default_val;
 				std::optional<bool> var;
 			};
@@ -49,6 +56,11 @@ namespace uci
 				
 				// See comments for base::parse()
 				virtual void parse(const std::string& line) override;
+
+				virtual std::unique_ptr<base> clone() const override
+				{
+					return std::make_unique<base>(*this);
+				}
 
 				std::optional<int> default_val;
 				std::optional<int> min;
@@ -64,6 +76,11 @@ namespace uci
 				// See comments for base::parse()
 				virtual void parse(const std::string& line) override;
 
+				virtual std::unique_ptr<base> clone() const override
+				{
+					return std::make_unique<base>(*this);
+				}
+
 				std::optional<std::string> default_val;
 				std::optional<std::list<std::string>> vals;
 			};
@@ -72,6 +89,11 @@ namespace uci
 			{
 			public:
 				virtual std::string to_string() const override;
+
+				virtual std::unique_ptr<base> clone() const override
+				{
+					return std::make_unique<base>(*this);
+				}
 
 				// See comments for base::parse()
 				virtual void parse(const std::string& line) override;
@@ -84,6 +106,11 @@ namespace uci
 
 				// See comments for base::parse()
 				virtual void parse(const std::string& line) override;
+
+				virtual std::unique_ptr<base> clone() const override
+				{
+					return std::make_unique<base>(*this);
+				}
 
 				std::optional<std::string> default_val;
 				//std::optional<std::string> var;
@@ -98,6 +125,7 @@ namespace uci
 			{
 				static_assert(std::is_base_of<commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
 			}
+			option(const option&) = default;
 			option(option&&) noexcept = default;
 			virtual ~option() noexcept = default;
 
@@ -109,7 +137,7 @@ namespace uci
 			{
 				static_assert(std::is_base_of<commands::option::base, OPTION_T>(), "OPTION_T must be derive uci::options::base");
 
-				this->ptr = std::make_unique<OPTION_T>(op);
+				this->ptr = op.ptr->clone();// std::make_unique<OPTION_T>(op);
 
 				return *this;
 			}

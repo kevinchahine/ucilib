@@ -22,8 +22,7 @@ namespace uci
 			
 			template <class COMMAND_T> 
 			command(const COMMAND_T& cmd) : 
-				cmd_ptr(std::make_unique<COMMAND_T>())
-			{}
+				cmd_ptr(cmd.clone()) {}
 			
 			~command() noexcept = default;
 			
