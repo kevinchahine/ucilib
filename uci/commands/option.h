@@ -42,7 +42,7 @@ namespace uci
 
 				virtual std::unique_ptr<base> clone() const override
 				{
-					return std::make_unique<base>(*this);
+					return std::make_unique<check>(*this);
 				}
 
 				std::optional<bool> default_val;
@@ -59,7 +59,7 @@ namespace uci
 
 				virtual std::unique_ptr<base> clone() const override
 				{
-					return std::make_unique<base>(*this);
+					return std::make_unique<spin>(*this);
 				}
 
 				std::optional<int> default_val;
@@ -78,7 +78,7 @@ namespace uci
 
 				virtual std::unique_ptr<base> clone() const override
 				{
-					return std::make_unique<base>(*this);
+					return std::make_unique<combo>(*this);
 				}
 
 				std::optional<std::string> default_val;
@@ -92,7 +92,7 @@ namespace uci
 
 				virtual std::unique_ptr<base> clone() const override
 				{
-					return std::make_unique<base>(*this);
+					return std::make_unique<button>(*this);
 				}
 
 				// See comments for base::parse()
@@ -109,7 +109,7 @@ namespace uci
 
 				virtual std::unique_ptr<base> clone() const override
 				{
-					return std::make_unique<base>(*this);
+					return std::make_unique<string>(*this);
 				}
 
 				std::optional<std::string> default_val;

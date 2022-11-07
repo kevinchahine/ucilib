@@ -59,12 +59,12 @@ namespace uci
 			virtual std::unique_ptr<command_base> clone() const override
 			{
 				cout << __FUNCTION__ << " not implemented" << endl;
-				return std::make_unique<T>(*this);
-				//std::unique_ptr<T> duplicate = std::make_unique<T>();
-				//
+				//return std::make_unique<T>(*this);
+				std::unique_ptr<T> duplicate = std::make_unique<T>();
+				
 				//(*duplicate) = static_cast<const T&>(*this);
 				//
-				//return duplicate;
+				return duplicate;
 				return nullptr;
 			}
 
