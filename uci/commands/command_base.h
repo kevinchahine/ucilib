@@ -1,13 +1,11 @@
 #pragma once
 
-#include "uci/commands/command_base.h"
 #include "uci/commands/helpers.h"
 
 #include <forge/core/Move.h>
 
 #include <string>
 #include <sstream>
-#include <optional>
 
 #include <boost/property_tree/ptree_fwd.hpp>
 

@@ -5,7 +5,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <iterator>
 #include <exception>
 
 #include <boost/algorithm/string/join.hpp>

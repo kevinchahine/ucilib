@@ -2,6 +2,8 @@
 
 #include "uci/commands/command_base.h"
 
+#include <optional>
+
 namespace uci
 {
 	namespace commands
