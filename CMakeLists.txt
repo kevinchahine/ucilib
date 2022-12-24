@@ -98,6 +98,10 @@ source_group(notes FILES ${NOTES})
 source_group("options" FILES ${OPTIONS})
 source_group(uci FILES ${UCI})
 
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE "/MP")	# parallel compilation
+endif()
+
 # --- Libraries (VCPKG) ---
 if (MSVC)
 	message(STATUS "\nVCPKG packages will be automatically linked to visual studio\n")
