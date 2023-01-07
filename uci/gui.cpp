@@ -1,4 +1,5 @@
-#include "base.h"
+#pragma once
+
 #include "gui.h"
 
 #include <boost/algorithm/string/split.hpp>
